@@ -853,60 +853,66 @@ textarea.form-control{resize:vertical;}
 <script>
 const LB_DATA = [{"id":1,"categoria":"ALTO","descripcion":"AFILADOR DE CUCHILLAS JARVIS 102901 115 V [LI-AFI-01]","codigo":"LI-AFI-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-01-25"}]},{"id":2,"categoria":"ALTO","descripcion":"BOMBA MULTIETAPAS VSE 5 16-50 BARNES [LI-BOM-05]","codigo":"LI-BOM-05","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-02-24"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-02-26"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-06-05"}]},{"id":3,"categoria":"ALTO","descripcion":"BOMBA SANGRE NEUMATICA 002 HUSKY [LI-BOM-04]","codigo":"LI-BOM-04","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-03-12"}]},{"id":4,"categoria":"ALTO","descripcion":"CAJON DE NOQUEO MIXTO BOX GS INGENIERIA [LI-NOQ-01]","codigo":"LI-NOQ-01","intervenciones":[]},{"id":5,"categoria":"ALTO","descripcion":"CALDERA 1 TERMO VAPOR 005-12 / 150 BHP [LI-CAL-01]","codigo":"LI-CAL-01","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-04-02"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-06-09"}]},{"id":6,"categoria":"ALTO","descripcion":"COMPRESOR KAESER 1 AS20 125 PSI [LI-COM-01]","codigo":"LI-COM-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-15"}]},{"id":7,"categoria":"ALTO","descripcion":"COMPRESOR KAESER 2 AS20 125 PSI [LI-COM-02]","codigo":"LI-COM-02","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-15"}]},{"id":8,"categoria":"ALTO","descripcion":"COMPRESOR Y SECADOR KAESER SMT10 T [LI-COM-04]","codigo":"LI-COM-04","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-02-25"}]},{"id":9,"categoria":"ALTO","descripcion":"CORTA PATAS 1 JARVIS 102879 [LI-COP-01]","codigo":"LI-COP-01","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-10-03"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-10-03"}]},{"id":10,"categoria":"ALTO","descripcion":"CORTA PATAS 2 JARVIS 102877 [LI-COP-02]","codigo":"LI-COP-02","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-10-04"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-10-04"}]},{"id":11,"categoria":"ALTO","descripcion":"CUCHILLO NEUMATICO 10 JARVIS 161984 [LI-CUN-10]","codigo":"LI-CUN-10","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-13"},{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-03-07"}]},{"id":12,"categoria":"ALTO","descripcion":"CUCHILLO NEUMATICO 9 JARVIS 161947 [LI-CUN-09]","codigo":"LI-CUN-09","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-13"},{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-03-16"}]},{"id":13,"categoria":"ALTO","descripcion":"DESCENSOR DE CABEZAS [LI-DEC-01]","codigo":"LI-DEC-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-02-03"}]},{"id":14,"categoria":"ALTO","descripcion":"DESCENSOR DE GRILLETES 1 [LI-DEC-02]","codigo":"LI-DEC-02","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-02"}]},{"id":15,"categoria":"ALTO","descripcion":"DESCORNADORA JARVIS [LI-DES-01]","codigo":"LI-DES-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-11-18"}]},{"id":16,"categoria":"ALTO","descripcion":"DESOLLADORA [LI-MDE-01]","codigo":"LI-MDE-01","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-22"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-01-24"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2026-04-04"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-08-25"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-11-19"}]},{"id":17,"categoria":"ALTO","descripcion":"DESPERNANCADOR [B2SCA-DES-01]","codigo":"B2SCA-DES-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-01-01"}]},{"id":18,"categoria":"ALTO","descripcion":"DESPEZUNADORA ELECTRICA ASERAGRO [DS-DES-03]","codigo":"DS-DES-03","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2025-04-01"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-04-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-04-01"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2025-04-01"}]},{"id":19,"categoria":"ALTO","descripcion":"DIFERENCIAL ELECTRICA DE CONTINGENCIA 2 TON [LI-DIF-03]","codigo":"LI-DIF-03","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-02-01"}]},{"id":20,"categoria":"ALTO","descripcion":"ELEVADOR DE POLEAS PLATAFORMA 01 [LI-ELP-01]","codigo":"LI-ELP-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2013-01-01"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-22"}]},{"id":21,"categoria":"ALTO","descripcion":"ELEVADOR DE POLEAS PLATAFORMA 02 [LI-ELP-02]","codigo":"LI-ELP-02","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2013-01-01"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-23"}]},{"id":22,"categoria":"ALTO","descripcion":"FRENOS AUTOMATICOS DE RIEL [FA-LBE-01]","codigo":"FA-LBE-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-12-23"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-09-24"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-05-09"}]},{"id":23,"categoria":"ALTO","descripcion":"INTERCAMBIADOR DE CALOR 02 ALFA LAVAL [LI-INT-02]","codigo":"LI-INT-02","intervenciones":[{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2026-05-17"}]},{"id":24,"categoria":"ALTO","descripcion":"IZADO DE BOVINOS MOTOREDUCTOR SEW 9.2 KW [LI-IZA-01]","codigo":"LI-IZA-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-22"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-04-02"}]},{"id":25,"categoria":"ALTO","descripcion":"IZADO EMERGENCIA [EM-IZA-01]","codigo":"EM-IZA-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-24"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-03-24"}]},{"id":26,"categoria":"ALTO","descripcion":"MAQUINA CORTA CABEZAS [LI-CAB-01]","codigo":"LI-CAB-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-06-10"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-03-18"}]},{"id":27,"categoria":"ALTO","descripcion":"MAQUINA LAVA LIBROS 02 CUAJOS ASERAGRO [VB-MLV-05]","codigo":"VB-MLV-05","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-04-17"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-03"}]},{"id":28,"categoria":"ALTO","descripcion":"MAQUINA LAVA LIBROS 01 FRINOX [VB-MLV-02]","codigo":"VB-MLV-02","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-04-17"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-03"}]},{"id":29,"categoria":"ALTO","descripcion":"MAQUINA LAVA OREJAS GUALDRON [VB-MLV-03]","codigo":"VB-MLV-03","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-06-06"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-06"}]},{"id":30,"categoria":"ALTO","descripcion":"MAQUINA LAVAPANZAS 01 FRINOX [VB-MLV-01]","codigo":"VB-MLV-01","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-04-17"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-03"}]},{"id":31,"categoria":"ALTO","descripcion":"MAQUINA LAVAPANZAS 02 FRIGOTEC [VB-MLV-04]","codigo":"VB-MLV-04","intervenciones":[]},{"id":32,"categoria":"ALTO","descripcion":"MULTIPLICADOR BOOSTER REGULADOR SMC 230PSI [LI-MUL-02]","codigo":"LI-MUL-02","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-07-04"}]},{"id":33,"categoria":"ALTO","descripcion":"PELADORA DE PATAS 1 FROGOTEC [PA-PEL-01]","codigo":"PA-PEL-01","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-04-17"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-03"}]},{"id":34,"categoria":"ALTO","descripcion":"PELADORA DE PATAS 3 FRIGOTEC [PA-PEL-03]","codigo":"PA-PEL-03","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-04-02"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-02"}]},{"id":35,"categoria":"ALTO","descripcion":"PISTOLA ATURDIDORA 01 ACCLES Y SHELVOKE [LI-PIA-01]","codigo":"LI-PIA-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-06-01"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-06-01"}]},{"id":36,"categoria":"ALTO","descripcion":"PISTOLA ATURDIDORA CORRALES ACCLES Y SHELVOKE [CO-PIA-02]","codigo":"CO-PIA-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-26"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-03-26"}]},{"id":37,"categoria":"ALTO","descripcion":"PISTOLA DE NOQUEO 002 JARVIS USSS-1 [LI-PIS-04]","codigo":"LI-PIS-04","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-17"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-08-22"}]},{"id":38,"categoria":"ALTO","descripcion":"PLANTA ELECTRICA DE EMERGENCIA 1 DAEWOO 750KVA [SU-PDE-01]","codigo":"SU-PDE-01","intervenciones":[]},{"id":39,"categoria":"ALTO","descripcion":"PLATAFORMA EMERGENCIA 01 SIERRA CANAL [EM-PLA-01]","codigo":"EM-PLA-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-01-10"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2025-03-10"}]},{"id":40,"categoria":"ALTO","descripcion":"PLATAFORMA EMERGENCIA 02 SIERRA PECHO [EM-PLA-02]","codigo":"EM-PLA-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-20"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2026-03-20"}]},{"id":41,"categoria":"ALTO","descripcion":"PLATAFORMA NO.04 CUCHILLOS NEUMATICOS [LI-PLA-04]","codigo":"LI-PLA-04","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":42,"categoria":"ALTO","descripcion":"PLATAFORMA NO.05 LA VUELTA [LI-PLA-05]","codigo":"LI-PLA-05","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":43,"categoria":"ALTO","descripcion":"PLATAFORMA NO.06 ANUDADO O MARCACION DE CANALES [LI-PLA-06]","codigo":"LI-PLA-06","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":44,"categoria":"ALTO","descripcion":"PLATAFORMA NO.08-01 DESOLLADORA [LI-PLA-08]","codigo":"LI-PLA-08","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":45,"categoria":"ALTO","descripcion":"PLATAFORMA NO.08-02 DESOLLADORA [LI-PLA-08B]","codigo":"LI-PLA-08B","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":46,"categoria":"ALTO","descripcion":"PLATAFORMA NO.09 SIERRA PECHO [LI-PLA-09]","codigo":"LI-PLA-09","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":47,"categoria":"ALTO","descripcion":"PLATAFORMA NO.10 VISCERAS BLANCAS [LI-PLA-10]","codigo":"LI-PLA-10","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":48,"categoria":"ALTO","descripcion":"PLATAFORMA NO.11 INSPECCION DE CALCULO [LI-PLA-11]","codigo":"LI-PLA-11","intervenciones":[]},{"id":49,"categoria":"ALTO","descripcion":"PLATAFORMA NO.12 VISCERAS ROJAS [LI-PLA-12]","codigo":"LI-PLA-12","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":50,"categoria":"ALTO","descripcion":"PLATAFORMA NO.13 SIERRA CANAL [LI-PLA-13]","codigo":"LI-PLA-13","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2013-01-01"}]},{"id":51,"categoria":"ALTO","descripcion":"POLIPASTO LAVADO DE POLEAS KAIXUN [LI-PLP-02]","codigo":"LI-PLP-02","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-10-10"}]},{"id":52,"categoria":"ALTO","descripcion":"POLIPASTO PATAS BISONTE 500/1000KG [PA-PLP-04]","codigo":"PA-PLP-04","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-05-28"}]},{"id":53,"categoria":"ALTO","descripcion":"POLIPASTO RECIBO EMERGENCIA BISONTE [EM-PLP-02]","codigo":"EM-PLP-02","intervenciones":[]},{"id":54,"categoria":"ALTO","descripcion":"SECADORA DE AIRE COMPRIMIDO KAESER [LI-SAC-01]","codigo":"LI-SAC-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-15"}]},{"id":55,"categoria":"ALTO","descripcion":"SECADORA INDUSTRIAL BYC TECHNOLOGIES [LI-SEC-01]","codigo":"LI-SEC-01","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-04-01"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-29"}]},{"id":56,"categoria":"ALTO","descripcion":"SECADORA INDUSTRIAL DANUBE [LI-SEC-02]","codigo":"LI-SEC-02","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2025-01-01"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-01-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-01-01"}]},{"id":57,"categoria":"ALTO","descripcion":"SIERRA DE CANALES 001 JARVIS 121203 [LI-SIE-04]","codigo":"LI-SIE-04","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-20"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-05-20"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-03-11"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-05-20"}]},{"id":58,"categoria":"ALTO","descripcion":"SIERRA PECHO 001 JARVIS 102712 [LI-SIE-03]","codigo":"LI-SIE-03","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-12-12"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-12-12"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-12-12"}]},{"id":59,"categoria":"ALTO","descripcion":"SIERRA PECHO 4 KENTMASTER 11041 [EM-SIE-01]","codigo":"EM-SIE-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-12-01"}]},{"id":60,"categoria":"ALTO","descripcion":"TANQUE CANON CONTENIDO RUMINAL 1 [VB-TAN-01]","codigo":"VB-TAN-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2024-01-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-01"}]},{"id":61,"categoria":"ALTO","descripcion":"TANQUE CANON CONTENIDO RUMINAL 2 [VB-TAN-02]","codigo":"VB-TAN-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2024-01-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-01"}]},{"id":62,"categoria":"ALTO","descripcion":"TANQUE CANON PIELES [LI-TPI-01]","codigo":"LI-TPI-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-26"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-26"}]},{"id":63,"categoria":"ALTO","descripcion":"TRANSFERENCIA MECANICA 1 MOTOREDUCTOR SEW-EURODRIVE [LI-TRA-01]","codigo":"LI-TRA-01","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-22"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-02-24"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2013-01-01"}]},{"id":64,"categoria":"ALTO","descripcion":"TRANSFERENCIA MECANICA 2 MOTOREDUCTOR SEW-EURODRIVE [LI-TRA-02]","codigo":"LI-TRA-02","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-22"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-02-24"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2013-01-01"}]},{"id":65,"categoria":"ALTO","descripcion":"UNIDAD POTENCIA 1 HIDRAULICA DESOLLADO [LI-UPO-01]","codigo":"LI-UPO-01","intervenciones":[{"frecuencia":"CUATRIMESTRAL","dias_ciclo":120,"ultima_fecha":"2026-04-08"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-04-08"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-08"}]},{"id":66,"categoria":"ALTO","descripcion":"UNIDAD POTENCIA 2 HIDRAULICA TIJERAS CORTAPATAS [LI-UPO-02]","codigo":"LI-UPO-02","intervenciones":[{"frecuencia":"CUATRIMESTRAL","dias_ciclo":120,"ultima_fecha":"2025-12-22"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-12-10"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-12-23"}]},{"id":67,"categoria":"ALTO","descripcion":"UNIDAD POTENCIA 3 HIDRAULICA DESCORNADORA [LI-UPO-03]","codigo":"LI-UPO-03","intervenciones":[{"frecuencia":"CUATRIMESTRAL","dias_ciclo":120,"ultima_fecha":"2026-02-17"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-02-17"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-02-17"}]},{"id":68,"categoria":"ALTO","descripcion":"UNIDAD POTENCIA 5 HIDRAULICA MAQUINA CORTA CABEZAS [LI-UPO-05]","codigo":"LI-UPO-05","intervenciones":[{"frecuencia":"CUATRIMESTRAL","dias_ciclo":120,"ultima_fecha":"2025-11-23"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-11-26"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-11-23"}]},{"id":69,"categoria":"MEDIO","descripcion":"DESCORNADORA KENTMASTER 24243 [LI-DES-02]","codigo":"LI-DES-02","intervenciones":[]},{"id":70,"categoria":"MEDIO","descripcion":"ESMERIL DE AFILADO DEWALT 2 HP [LI-ESA-01]","codigo":"LI-ESA-01","intervenciones":[]},{"id":71,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 1 AIRMAX 1.5 HP [LI-EXT-01]","codigo":"LI-EXT-01","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-06-27"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-22"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2023-04-27"}]},{"id":72,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 10 DE PATAS AIRMAX [PA-EXT-10]","codigo":"PA-EXT-10","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-06-28"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-23"}]},{"id":73,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 11 DE CABEZAS AIRMAX [CA-EXT-11]","codigo":"CA-EXT-11","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-06-29"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-24"}]},{"id":74,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 12 VISERAS B. AIRMAX [VB-EXT-12]","codigo":"VB-EXT-12","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-06-30"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-25"}]},{"id":75,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 13 VISERAS R. AIRMAX [VR-EXT-13]","codigo":"VR-EXT-13","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-26"}]},{"id":76,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 14 PASILLO AIRMAX [VR-INY-14]","codigo":"VR-INY-14","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-02"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-27"}]},{"id":77,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 15 VISCERAS BL. AIRMAX [VB-EXT-15]","codigo":"VB-EXT-15","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-03"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-28"}]},{"id":78,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 2 AIRMAX 1.5 HP [LI-EXT-02]","codigo":"LI-EXT-02","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-04"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-01"}]},{"id":79,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 3 AIRMAX 1.5 HP [LI-EXT-03]","codigo":"LI-EXT-03","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-05"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-02"}]},{"id":80,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 4 AIRMAX 1.5 [LI-EXT-04]","codigo":"LI-EXT-04","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-06"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-03"}]},{"id":81,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 5 LATERAL AIRMAX 1.5 [LI-EXT-05]","codigo":"LI-EXT-05","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-07"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-04"}]},{"id":82,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 6 LATERAL AIRMAX 1.5 [LI-EXT-06]","codigo":"LI-EXT-06","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-08"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-05"}]},{"id":83,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 7 SALON MULTIPLE AIRMAX [LI-EXT-07]","codigo":"LI-EXT-07","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-09"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-06"}]},{"id":84,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 8 BANO HOMBRES AIRMAX [LI-EXT-08]","codigo":"LI-EXT-08","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-10"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-07"}]},{"id":85,"categoria":"MEDIO","descripcion":"EXTRACTOR DE AIRE 9 BANO MUJERES AIRMAX [LI-EXT-09]","codigo":"LI-EXT-09","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-07-11"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-08"}]},{"id":86,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 1 FIN DE LINEA VAXA 3 HP [LI-INY-01]","codigo":"LI-INY-01","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-03"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-09"}]},{"id":87,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 10 DE CABEZAS VAXA [CA-INY-10]","codigo":"CA-INY-10","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-04"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-10"}]},{"id":88,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 11 VISERAS B. VAXA [VB-INY-11]","codigo":"VB-INY-11","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-05"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-11"}]},{"id":89,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 12 VISERAS R. VAXA [VR-INY-12]","codigo":"VR-INY-12","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-06"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-12"}]},{"id":90,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 2 FIN DE LINEA VAXA [LI-INY-02]","codigo":"LI-INY-02","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-07"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-13"}]},{"id":91,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 3 FIN DE LINEA VAXA [LI-INY-03]","codigo":"LI-INY-03","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-08"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-14"}]},{"id":92,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 4 FIN DE LINEA VAXA [LI-INY-04]","codigo":"LI-INY-04","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-09"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-15"}]},{"id":93,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 5 LATERAL VAXA [LI-INY-05]","codigo":"LI-INY-05","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-10"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-16"}]},{"id":94,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 6 LATERAL VAXA [LI-INY-06]","codigo":"LI-INY-06","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-11"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-17"}]},{"id":95,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 7 VAXA [LI-INY-07]","codigo":"LI-INY-07","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-12"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-18"}]},{"id":96,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 8 VAXA [LI-INY-08]","codigo":"LI-INY-08","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-13"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-19"}]},{"id":97,"categoria":"MEDIO","descripcion":"INYECTOR DE AIRE 9 DE PATAS VAXA [PA-INY-09]","codigo":"PA-INY-09","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-02-14"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-03-20"}]},{"id":98,"categoria":"BAJO","descripcion":"BOMBA CENTRIGUGA CALDERA 01 WEG [ZDC-BOM-01]","codigo":"ZDC-BOM-01","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-06-09"}]},{"id":99,"categoria":"BAJO","descripcion":"BOMBA CENTRIGUGA CALDERA 02 WEG [ZDC-BOM-02]","codigo":"ZDC-BOM-02","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-05-18"}]},{"id":100,"categoria":"BAJO","descripcion":"BOMBA SANGRE NEUMATICA 001 HUSKY [LI-BOM-02]","codigo":"LI-BOM-02","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-03-12"}]},{"id":101,"categoria":"BAJO","descripcion":"CALDERA 2 TERMO VAPOR 100 BHP [LI-CAL-02]","codigo":"LI-CAL-02","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-04-25"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-25"}]},{"id":102,"categoria":"BAJO","descripcion":"CORTA PATAS KENMASTER 24469 [LI-COP-04]","codigo":"LI-COP-04","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-01-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-01-22"}]},{"id":103,"categoria":"BAJO","descripcion":"CUCHILLO NEUMATICO 11 KENMASTER [LI-CUN-11]","codigo":"LI-CUN-11","intervenciones":[{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-03-06"}]},{"id":104,"categoria":"BAJO","descripcion":"CUCHILLO NEUMATICO 7 JARVIS [LI-CUN-07]","codigo":"LI-CUN-07","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-04-13"},{"frecuencia":"BIMENSUAL","dias_ciclo":60,"ultima_fecha":"2026-03-07"}]},{"id":105,"categoria":"BAJO","descripcion":"IZADO DE BOVINOS SEW 9.2 KW [LI-IZA-O2]","codigo":"LI-IZA-O2","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-04-02"}]},{"id":106,"categoria":"BAJO","descripcion":"LAVABOTAS 1 5 PUESTOS [LI-LVB-01]","codigo":"LI-LVB-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2024-04-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-04-02"}]},{"id":107,"categoria":"BAJO","descripcion":"LAVABOTAS 2 5 PUESTOS [VS-LVB-02]","codigo":"VS-LVB-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2024-04-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-04-02"}]},{"id":108,"categoria":"BAJO","descripcion":"LAVADORA INDUSTRIAL DANUBE 25 KG [LI-LAV-02]","codigo":"LI-LAV-02","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-01-01"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-01-01"}]},{"id":109,"categoria":"BAJO","descripcion":"PISTOLA ATURDIDORA 02 ACCLES Y SHELVOKE [LI-PIA-02]","codigo":"LI-PIA-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-04-06"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-01-06"}]},{"id":110,"categoria":"BAJO","descripcion":"PISTOLA DE NOQUEO 001 JARVIS USSS-1 [LI-PIS-01]","codigo":"LI-PIS-01","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-04-22"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-08-22"}]},{"id":111,"categoria":"BAJO","descripcion":"PISTOLA DE NOQUEO 003 JARVIS USSS-21 [LI-PIS-03]","codigo":"LI-PIS-03","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-03-23"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2023-08-23"}]},{"id":112,"categoria":"BAJO","descripcion":"PLATAFORMA NO.01 SANGRIA 6 PUESTOS [LI-PLA-01]","codigo":"LI-PLA-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"}]},{"id":113,"categoria":"BAJO","descripcion":"PLATAFORMA NO.02 PRIMERA PATA [LI-PLA-02]","codigo":"LI-PLA-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-02"}]},{"id":114,"categoria":"BAJO","descripcion":"PLATAFORMA NO.03 SEGUNDA PATA [LI-PLA-03]","codigo":"LI-PLA-03","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-03"}]},{"id":115,"categoria":"BAJO","descripcion":"PLATAFORMA NO.07 DESPEJE FIJA DE CADERA [LI-PLA-07]","codigo":"LI-PLA-07","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-04"}]},{"id":116,"categoria":"BAJO","descripcion":"PLATAFORMA NO.14 EXTRACCION MEDULAR [LI-PLA-14]","codigo":"LI-PLA-14","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"}]},{"id":117,"categoria":"BAJO","descripcion":"PLATAFORMA NO.15 INSPECCION VETERINARIA [LI-PLA-15]","codigo":"LI-PLA-15","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-03-24"},{"frecuencia":"BIANUAL","dias_ciclo":730,"ultima_fecha":"2026-03-24"}]},{"id":118,"categoria":"BAJO","descripcion":"PLATAFORMA NO.16 CONTROL CERO SUPERIOR [LI-PLA-16]","codigo":"LI-PLA-16","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-02"}]},{"id":119,"categoria":"BAJO","descripcion":"PLATAFORMA NO.17 CONTROL CERO INFERIOR [LI-PLA-17]","codigo":"LI-PLA-17","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-02"}]},{"id":120,"categoria":"BAJO","descripcion":"PLATAFORMA NO.18 DOBLE LAVADO SUPERIOR [LI-PLA-18]","codigo":"LI-PLA-18","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-02-02"}]},{"id":121,"categoria":"BAJO","descripcion":"PLATAFORMA NO.19 APLICACION ACIDO LACTICO [LI-PLA-19]","codigo":"LI-PLA-19","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-03-02"}]},{"id":122,"categoria":"BAJO","descripcion":"PLATAFORMA NO.20 DECOMISO [LI-PLA-20]","codigo":"LI-PLA-20","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2013-01-01"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2013-01-01"}]},{"id":123,"categoria":"BAJO","descripcion":"POLIPASTO PATAS KAIXUN 999 LB [PA-PLP-03]","codigo":"PA-PLP-03","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-25"}]},{"id":124,"categoria":"BAJO","descripcion":"POLIPASTO RECIBO EMERGENCIA KAIXUN [EM-PLP-01]","codigo":"EM-PLP-01","intervenciones":[{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-25"}]},{"id":125,"categoria":"BAJO","descripcion":"SECADOR BOTAS N0.01 [LI-SCB-01]","codigo":"LI-SCB-01","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2024-01-06"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-26"}]},{"id":126,"categoria":"BAJO","descripcion":"SECADOR BOTAS N0.02 [LI-SCB-02]","codigo":"LI-SCB-02","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2024-01-07"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-27"}]},{"id":127,"categoria":"BAJO","descripcion":"SECADOR BOTAS N0.03 [LI-SCB-03]","codigo":"LI-SCB-03","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2024-01-08"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-28"}]},{"id":128,"categoria":"BAJO","descripcion":"SECADOR BOTAS N0.04 [LI-SCB-04]","codigo":"LI-SCB-04","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2024-01-09"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-29"}]},{"id":129,"categoria":"BAJO","descripcion":"SECADOR BOTAS N0.05 [LI-SCB-05]","codigo":"LI-SCB-05","intervenciones":[{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2024-01-10"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2024-01-30"}]},{"id":130,"categoria":"BAJO","descripcion":"SIERRA DE CANALES 002 JARVIS 121201 [LI-SIE-05]","codigo":"LI-SIE-05","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-20"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-05-20"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-03-11"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-05-20"}]},{"id":131,"categoria":"BAJO","descripcion":"SIERRA DE CANALES 003 JARVIS 121281 [EM-SIE-2]","codigo":"EM-SIE-2","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-20"},{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2026-05-20"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-03-11"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2026-05-20"}]},{"id":132,"categoria":"BAJO","descripcion":"SIERRA PECHO 002 JARVIS 103051 [LI-SIE-02]","codigo":"LI-SIE-02","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-08-04"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-08-04"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-08-04"}]},{"id":133,"categoria":"BAJO","descripcion":"SIERRA PECHO 003 JARVIS [LI-SIE-10]","codigo":"LI-SIE-10","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-08-02"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-08-02"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-08-02"}]},{"id":134,"categoria":"BAJO","descripcion":"SIERRA PECHO 3 JARVIS 102819 [LI-SIE-01]","codigo":"LI-SIE-01","intervenciones":[{"frecuencia":"TRIMESTRAL","dias_ciclo":90,"ultima_fecha":"2025-12-12"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-12-12"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-12-12"}]},{"id":135,"categoria":"BAJO","descripcion":"TANQUE PULMON KAESER 11 BAR [LI-TAN-01]","codigo":"LI-TAN-01","intervenciones":[{"frecuencia":"MENSUAL","dias_ciclo":30,"ultima_fecha":"2026-05-20"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2026-05-20"}]},{"id":136,"categoria":"BAJO","descripcion":"UNIDAD POTENCIA 4 HIDRAULICA CONTINGENCIA [LI-UPO-04]","codigo":"LI-UPO-04","intervenciones":[{"frecuencia":"CUATRIMESTRAL","dias_ciclo":120,"ultima_fecha":"2025-12-22"},{"frecuencia":"SEMESTRAL","dias_ciclo":180,"ultima_fecha":"2025-12-10"},{"frecuencia":"ANUAL","dias_ciclo":365,"ultima_fecha":"2025-12-23"}]}];
 
-const TODAY = new Date(2026,5,6);
+const TODAY = new Date();
 const FREQ_DIAS = {MENSUAL:30,BIMENSUAL:60,TRIMESTRAL:90,CUATRIMESTRAL:120,SEMESTRAL:180,ANUAL:365,BIANUAL:730};
 
-function ls(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
-function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+// ── API CACHE ─────────────────────────────────────────
+let _cache = {areas:null, equipos:{}, registros:null, config:null, tecnicos:null};
 
-function getAreas(){
-  let a=ls('mtto_areas');
-  if(!a){
-    a=[{id:'LB',nombre:'Línea de Beneficio',icono:'🏭',color:'#3b82f6'},
-       {id:'DS',nombre:'Desposte',icono:'🔪',color:'#8b5cf6'},
-       {id:'CO',nombre:'Corrales',icono:'🐄',color:'#10b981'},
-       {id:'PTAR',nombre:'PTAR',icono:'💧',color:'#06b6d4'},
-       {id:'PTAP',nombre:'PTAP',icono:'🚰',color:'#f59e0b'}];
-    lsSet('mtto_areas',a);
-  }
-  return a;
+async function api(method, path, body){
+  const opts = {method, headers:{'Content-Type':'application/json'}};
+  if(body) opts.body = JSON.stringify(body);
+  const r = await fetch('/api'+path, opts);
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
 }
 
-function getEquipos(areaId){
-  const deleted=ls('mtto_deleted_LB')||[];
-  if(areaId==='LB'){
-    const custom=ls('mtto_equipos_LB')||[];
-    const overrides={};
-    custom.forEach(e=>overrides[e.id]=e);
-    const base=LB_DATA.filter(e=>!deleted.includes(e.id)).map(e=>overrides[e.id]||e);
-    const extras=custom.filter(e=>!LB_DATA.find(b=>b.id===e.id));
-    return [...base,...extras];
-  }
-  return (ls('mtto_equipos_'+areaId)||[]);
+async function getAreas(){
+  if(!_cache.areas) _cache.areas = await api('GET','/areas');
+  return _cache.areas;
 }
 
-function saveEquipo(areaId,eq){
-  let list=ls('mtto_equipos_'+areaId)||[];
-  const idx=list.findIndex(e=>e.id===eq.id);
-  if(idx>=0) list[idx]=eq; else list.push(eq);
-  lsSet('mtto_equipos_'+areaId,list);
+async function getEquipos(areaId){
+  if(!_cache.equipos[areaId]) _cache.equipos[areaId] = await api('GET','/equipos/'+areaId);
+  return _cache.equipos[areaId];
 }
 
-function deleteEquipo(areaId,eqId){
-  if(areaId==='LB'){
-    let d=ls('mtto_deleted_LB')||[];
-    if(!d.includes(eqId)) d.push(eqId);
-    lsSet('mtto_deleted_LB',d);
-    let custom=ls('mtto_equipos_LB')||[];
-    lsSet('mtto_equipos_LB',custom.filter(e=>e.id!==eqId));
+async function saveEquipo(areaId, eq){
+  if(eq.id && typeof eq.id === 'number' && eq.id < 1e12){
+    await api('PUT','/equipos/'+eq.id, {...eq, area_id:areaId});
   } else {
-    let list=ls('mtto_equipos_'+areaId)||[];
-    lsSet('mtto_equipos_'+areaId,list.filter(e=>e.id!==eqId));
+    await api('POST','/equipos', {...eq, area_id:areaId});
   }
+  _cache.equipos[areaId] = null;
 }
 
-function getRegistros(){ return ls('mtto_registros')||[]; }
-function getConfig(){ return ls('mtto_config')||{empresa:'Planta de Beneficio',year:'2026',pass:''}; }
+async function deleteEquipo(areaId, eqId){
+  await api('DELETE','/equipos/'+eqId);
+  _cache.equipos[areaId] = null;
+}
+
+async function getRegistros(){
+  if(!_cache.registros) _cache.registros = await api('GET','/registros');
+  return _cache.registros;
+}
+
+async function getConfig(){
+  if(!_cache.config) _cache.config = await api('GET','/config');
+  return _cache.config || {empresa:'Planta de Beneficio',year:'2026',pass:''};
+}
+
+async function getTecnicos(){
+  if(!_cache.tecnicos) _cache.tecnicos = await api('GET','/tecnicos');
+  return _cache.tecnicos || [];
+}
+
+function invalidate(key){ 
+  if(key==='areas') _cache.areas=null;
+  else if(key==='registros') _cache.registros=null;
+  else if(key==='config') _cache.config=null;
+  else if(key==='tecnicos') _cache.tecnicos=null;
+  else if(key) _cache.equipos[key]=null;
+}
 
 let currentArea='LB', DATA=[], eqFilter='TODOS', alertFilter='VENCIDO';
 let eqPage=1; const PER_PAGE=20;
@@ -914,24 +920,24 @@ let calYear=2026, calMonth=6;
 let calFilters={VENCIDO:true,PROXIMO:true,OK:true};
 let searchQ='', fotosPendientes=[];
 
-(function init(){
-  const cfg=getConfig();
-  document.getElementById('sb-empresa').textContent=cfg.empresa;
-  document.getElementById('cfg-empresa').value=cfg.empresa;
+(async function init(){
+  const cfg = await getConfig();
+  document.getElementById('sb-empresa').textContent=cfg.empresa||'Planta de Beneficio';
+  document.getElementById('cfg-empresa').value=cfg.empresa||'';
   document.getElementById('cfg-year').value=cfg.year||'2026';
   document.getElementById('sf-fecha').textContent=TODAY.toLocaleDateString('es-CO',{day:'2-digit',month:'short'});
   document.getElementById('sb-year').textContent=cfg.year||'2026';
-  buildAreaSelectors();
-  cambiarArea('LB');
-  renderAreas();
-  document.getElementById('reg-fecha').value='2026-06-06';
-  renderTecLista();
-  populateTecnicoSelect();
+  await buildAreaSelectors();
+  await cambiarArea('LB');
+  await renderAreas();
+  document.getElementById('reg-fecha').value=TODAY.toISOString().split('T')[0];
+  await renderTecLista();
+  await populateTecnicoSelect();
   checkLogin();
 })();
 
-function buildAreaSelectors(){
-  const areas=getAreas();
+async function buildAreaSelectors(){
+  const areas=await getAreas();
   ['area-select','reg-area'].forEach(id=>{
     const s=document.getElementById(id);
     s.innerHTML='';
@@ -944,10 +950,11 @@ function buildAreaSelectors(){
   document.getElementById('reg-area').value=currentArea;
 }
 
-function cambiarArea(areaId){
+async function cambiarArea(areaId){
   currentArea=areaId;
-  DATA=getEquipos(areaId);
-  const area=getAreas().find(a=>a.id===areaId);
+  DATA=await getEquipos(areaId);
+  const areas=await getAreas();
+  const area=areas.find(a=>a.id===areaId);
   if(area){
     document.getElementById('topbar-area-name').textContent=area.icono+' '+area.nombre;
     document.getElementById('topbar-area-dot').style.background=area.color;
@@ -956,13 +963,13 @@ function cambiarArea(areaId){
   document.getElementById('area-select').value=areaId;
   eqPage=1; searchQ='';
   document.getElementById('search-input').value='';
-  renderAll();
+  await renderAll();
 }
 
-function renderAll(){
+async function renderAll(){
   renderDashboard(); renderAlertas(); renderEquipos();
-  renderCalendar(); renderReportes(); renderRegistros(); renderNotifs();
-  populateRegEquipos();
+  renderCalendar(); renderReportes(); await renderRegistros(); renderNotifs();
+  await populateRegEquipos();
 }
 
 function goPage(id,el){
@@ -976,6 +983,7 @@ function goPage(id,el){
   if(id==='areas') renderAreas();
   if(id==='reportes') renderReportes();
   if(id==='config'){ renderTecLista(); populateTecnicoSelect(); }
+  if(id==='registro') populateRegEquipos();
 }
 
 function doSearch(q){ searchQ=q.toLowerCase(); renderEquipos(); }
@@ -1198,11 +1206,12 @@ function openFotoModal(src){ document.getElementById('foto-modal-img').src=src; 
 function closeFotoModal(e){ if(!e||e.target===document.getElementById('foto-modal-overlay')) document.getElementById('foto-modal-overlay').classList.remove('on'); }
 function irRegistrar(areaId,eqId){ closeModal(); document.getElementById('reg-area').value=areaId; populateRegEquipos(); setTimeout(()=>document.getElementById('reg-equipo').value=eqId,80); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on')); goPage('registro',document.querySelectorAll('.nav-item')[4]); }
 
-function populateRegEquipos(){
-  populateTecnicoSelect();
+async function populateRegEquipos(){
+  await populateTecnicoSelect();
   const aId=document.getElementById('reg-area').value||currentArea;
   const s=document.getElementById('reg-equipo'); s.innerHTML='<option value="">-- Seleccionar equipo --</option>';
-  getEquipos(aId).forEach(e=>{ const o=document.createElement('option'); o.value=e.id; o.textContent=e.codigo?`[${e.codigo}] ${e.descripcion.substring(0,44)}`:e.descripcion.substring(0,52); s.appendChild(o); });
+  const equipos=await getEquipos(aId);
+  equipos.forEach(e=>{ const o=document.createElement('option'); o.value=e.id; o.textContent=e.codigo?`[${e.codigo}] ${e.descripcion.substring(0,44)}`:e.descripcion.substring(0,52); s.appendChild(o); });
 }
 function handleFotos(input){
   const files=Array.from(input.files);
@@ -1212,26 +1221,32 @@ function handleFotos(input){
 }
 function renderFotoPreview(){ document.getElementById('foto-preview').innerHTML=fotosPendientes.map((f,i)=>`<div class="foto-thumb"><img src="${f}" onclick="openFotoModal('${f}')"><button class="foto-del" onclick="removeFoto(${i})">✕</button></div>`).join(''); }
 function removeFoto(i){ fotosPendientes.splice(i,1); renderFotoPreview(); }
-function guardarRegistro(){
+async function guardarRegistro(){
   const aId=document.getElementById('reg-area').value||currentArea;
   const eqId=document.getElementById('reg-equipo').value, freq=document.getElementById('reg-freq').value, fecha=document.getElementById('reg-fecha').value;
   if(!eqId||!freq||!fecha){ alert('Completa los campos requeridos (*)'); return; }
-  const eq=getEquipos(aId).find(e=>e.id==eqId);
-  const regs=getRegistros();
-  regs.push({id:Date.now(),equipo_id:parseInt(eqId),area_id:aId,equipo_nombre:eq?eq.descripcion.substring(0,60):'',frecuencia:freq,fecha,tecnico:document.getElementById('reg-tecnico').value,obs:document.getElementById('reg-obs').value,fotos:[...fotosPendientes],registrado:new Date().toISOString()});
-  lsSet('mtto_registros',regs);
-  if(eq){
-    const intervs=(eq.intervenciones||[]).map(iv=>iv.frecuencia===freq?{...iv,ultima_fecha:fecha}:iv);
-    if(!intervs.find(iv=>iv.frecuencia===freq)) intervs.push({frecuencia:freq,dias_ciclo:FREQ_DIAS[freq],ultima_fecha:fecha});
-    saveEquipo(aId,{...eq,intervenciones:intervs});
-    cambiarArea(currentArea);
-  }
-  fotosPendientes=[]; renderFotoPreview(); limpiarForm(); renderRegistros();
-  alert('✅ Registro guardado');
+  const equipos=await getEquipos(aId);
+  const eq=equipos.find(e=>e.id==eqId);
+  try {
+    await api('POST','/registros',{
+      equipo_id:parseInt(eqId), area_id:aId,
+      equipo_nombre:eq?eq.descripcion.substring(0,60):'',
+      frecuencia:freq, fecha,
+      tecnico:document.getElementById('reg-tecnico').value,
+      obs:document.getElementById('reg-obs').value,
+      fotos:[...fotosPendientes]
+    });
+    invalidate('registros');
+    invalidate(aId);
+    await cambiarArea(currentArea);
+    fotosPendientes=[]; renderFotoPreview(); limpiarForm(); await renderRegistros();
+    alert('✅ Registro guardado');
+  } catch(e){ alert('Error al guardar: '+e.message); }
 }
 function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-fecha').value='2026-06-06'; fotosPendientes=[]; renderFotoPreview(); }
-function renderRegistros(){
-  document.getElementById('reg-tbody').innerHTML=getRegistros().slice().reverse().map(r=>`<tr>
+async function renderRegistros(){
+  const regs = await getRegistros();
+  document.getElementById('reg-tbody').innerHTML=regs.slice().reverse().map(r=>`<tr>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${fmtDate(r.fecha)}</td>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${r.equipo_nombre||'--'}</td>
     <td style="padding:8px 14px;border-top:1px solid var(--bd);"><span class="freq-tag">${r.frecuencia}</span></td>
@@ -1269,22 +1284,24 @@ function addFreqRow(freq='',fecha=''){
   <button type="button" style="background:transparent;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:0 4px;margin-bottom:2px;" onclick="this.parentElement.remove()">✕</button>`;
   wrap.appendChild(div);
 }
-function guardarEquipo(){
+async function guardarEquipo(){
   const desc=document.getElementById('eq-desc').value.trim(), codigo=document.getElementById('eq-codigo').value.trim();
   const cat=document.getElementById('eq-cat').value, aId=document.getElementById('eq-area-sel').value;
   const editId=document.getElementById('eq-edit-id').value;
   if(!desc){ alert('La descripción es requerida'); return; }
   const intervenciones=[...document.querySelectorAll('#eq-freq-list .freq-item')].map(row=>({ frecuencia:row.querySelector('.freq-sel').value, dias_ciclo:FREQ_DIAS[row.querySelector('.freq-sel').value]||30, ultima_fecha:row.querySelector('.freq-fecha').value||null })).filter(iv=>iv.frecuencia);
-  const eq={id:editId?parseInt(editId):Date.now(),categoria:cat,descripcion:desc,codigo,intervenciones};
-  saveEquipo(aId,eq); cambiarArea(currentArea); closeEqModal(); alert('✅ Equipo guardado');
+  const eq={id:editId?parseInt(editId):null,categoria:cat,descripcion:desc,codigo,intervenciones};
+  try{ await saveEquipo(aId,eq); await cambiarArea(currentArea); closeEqModal(); alert('✅ Equipo guardado'); }
+  catch(e){ alert('Error: '+e.message); }
 }
-function eliminarEquipo(){ const editId=document.getElementById('eq-edit-id').value; if(!editId) return; if(!confirm('¿Eliminar este equipo?')) return; deleteEquipo(currentArea,parseInt(editId)); cambiarArea(currentArea); closeEqModal(); }
+async function eliminarEquipo(){ const editId=document.getElementById('eq-edit-id').value; if(!editId) return; if(!confirm('¿Eliminar este equipo?')) return; await deleteEquipo(currentArea,parseInt(editId)); await cambiarArea(currentArea); closeEqModal(); }
 function closeEqModal(e){ if(!e||e.target===document.getElementById('eq-modal-overlay')) document.getElementById('eq-modal-overlay').classList.remove('on'); }
 
-function renderAreas(){
-  const areas=getAreas();
-  document.getElementById('areas-grid').innerHTML=areas.map(a=>{
-    const eqs=getEquipos(a.id), v=countVencidos(eqs);
+async function renderAreas(){
+  const areas=await getAreas();
+  const eqsAll=await Promise.all(areas.map(a=>getEquipos(a.id)));
+  document.getElementById('areas-grid').innerHTML=areas.map((a,idx)=>{
+    const eqs=eqsAll[idx], v=countVencidos(eqs);
     return `<div class="area-card ${a.id===currentArea?'active-area':''}" style="border-top:3px solid ${a.color};" onclick="cambiarArea('${a.id}');goPage('dashboard',document.querySelector('.nav-item'))">
       <div class="area-card-actions"><button class="btn-icon" onclick="event.stopPropagation();openAreaModal('${a.id}')" title="Editar">✏️</button></div>
       <div class="area-card-icon">${a.icono}</div><div class="area-card-name">${a.nombre}</div>
@@ -1298,20 +1315,23 @@ function openAreaModal(aId){
   if(aId){ const a=getAreas().find(x=>x.id===aId); if(!a) return; document.getElementById('area-nombre').value=a.nombre; document.getElementById('area-icono').value=a.icono; document.getElementById('area-color').value=a.color; document.getElementById('area-edit-id').value=aId; document.getElementById('area-delete-btn').style.display=''; document.getElementById('area-modal-title').textContent='Editar Área'; }
   document.getElementById('area-modal-overlay').classList.add('on');
 }
-function guardarArea(){
+async function guardarArea(){
   const nombre=document.getElementById('area-nombre').value.trim(), icono=document.getElementById('area-icono').value.trim()||'🏭', color=document.getElementById('area-color').value, editId=document.getElementById('area-edit-id').value;
   if(!nombre){ alert('Nombre requerido'); return; }
-  let areas=getAreas();
-  if(editId) areas=areas.map(a=>a.id===editId?{...a,nombre,icono,color}:a);
-  else areas.push({id:'AREA_'+Date.now(),nombre,icono,color});
-  lsSet('mtto_areas',areas); buildAreaSelectors(); renderAreas(); closeAreaModal();
+  try{
+    if(editId) await api('PUT','/areas/'+editId,{id:editId,nombre,icono,color});
+    else await api('POST','/areas',{id:'AREA_'+Date.now(),nombre,icono,color});
+    invalidate('areas');
+    await buildAreaSelectors(); await renderAreas(); closeAreaModal();
+  } catch(e){ alert('Error: '+e.message); }
 }
-function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); localStorage.removeItem('mtto_equipos_'+editId); buildAreaSelectors(); if(currentArea===editId) cambiarArea('LB'); renderAreas(); closeAreaModal(); }
+async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; try{ await api('DELETE','/areas/'+editId); invalidate('areas'); await buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }catch(e){alert('Error: '+e.message);} }
 function closeAreaModal(e){ if(!e||e.target===document.getElementById('area-modal-overlay')) document.getElementById('area-modal-overlay').classList.remove('on'); }
 
-function renderGraficas(){
-  const filtArea=document.getElementById('graf-area').value, areas=getAreas();
-  const aStats=areas.map(a=>{ const eqs=getEquipos(a.id); let v=0,p=0,ok=0; eqs.forEach(e=>calcIntervenciones(e.intervenciones).forEach(i=>{ if(i.estado==='VENCIDO')v++;else if(i.estado==='PROXIMO')p++;else if(i.estado==='OK')ok++; })); return {a,v,p,ok,tot:v+p+ok}; });
+async function renderGraficas(){
+  const filtArea=document.getElementById('graf-area').value, areas=await getAreas();
+  const eqsAll=await Promise.all(areas.map(a=>getEquipos(a.id)));
+  const aStats=areas.map((a,idx)=>{ const eqs=eqsAll[idx]; let v=0,p=0,ok=0; eqs.forEach(e=>calcIntervenciones(e.intervenciones).forEach(i=>{ if(i.estado==='VENCIDO')v++;else if(i.estado==='PROXIMO')p++;else if(i.estado==='OK')ok++; })); return {a,v,p,ok,tot:v+p+ok}; });
   document.getElementById('chart-areas').innerHTML=aStats.map(s=>{
     const pV=s.tot>0?Math.round(s.v/s.tot*100):0, pP=s.tot>0?Math.round(s.p/s.tot*100):0, pOk=s.tot>0?Math.round(s.ok/s.tot*100):0;
     return `<div class="bar-row" style="margin-bottom:8px;"><div class="bar-label" style="width:120px;font-size:10px;">${s.a.icono} ${s.a.nombre.substring(0,14)}</div>
@@ -1391,14 +1411,23 @@ function exportPDF(){
 }
 
 function guardarConfig(){ const cfg=getConfig(); cfg.empresa=document.getElementById('cfg-empresa').value.trim()||'Planta de Beneficio'; cfg.year=document.getElementById('cfg-year').value.trim()||'2026'; lsSet('mtto_config',cfg); document.getElementById('sb-empresa').textContent=cfg.empresa; alert('✅ Guardado'); }
-function cambiarPassword(){ const cfg=getConfig(), actual=document.getElementById('cfg-pass-actual').value, nueva=document.getElementById('cfg-pass-nueva').value, conf=document.getElementById('cfg-pass-confirm').value; if(cfg.pass&&actual!==cfg.pass){alert('Contraseña actual incorrecta');return;} if(!nueva||nueva.length<4){alert('Mínimo 4 caracteres');return;} if(nueva!==conf){alert('Las contraseñas no coinciden');return;} cfg.pass=nueva; lsSet('mtto_config',cfg); ['cfg-pass-actual','cfg-pass-nueva','cfg-pass-confirm'].forEach(id=>document.getElementById(id).value=''); alert('✅ Contraseña actualizada'); }
+async function cambiarPassword(){ 
+  const cfg=await getConfig();
+  const actual=document.getElementById('cfg-pass-actual').value, nueva=document.getElementById('cfg-pass-nueva').value, conf=document.getElementById('cfg-pass-confirm').value;
+  if(cfg.pass&&actual!==cfg.pass){alert('Contraseña actual incorrecta');return;}
+  if(!nueva||nueva.length<4){alert('Mínimo 4 caracteres');return;}
+  if(nueva!==conf){alert('Las contraseñas no coinciden');return;}
+  await api('PUT','/config',{empresa:cfg.empresa,year:cfg.year,passwd:nueva});
+  invalidate('config');
+  ['cfg-pass-actual','cfg-pass-nueva','cfg-pass-confirm'].forEach(id=>document.getElementById(id).value='');
+  alert('✅ Contraseña actualizada'); }
 
-function exportarDatos(){
-  const bk={version:2,fecha:new Date().toISOString(),areas:getAreas(),registros:getRegistros(),config:getConfig(),tecnicos:getTecnicos(),equipos_custom:{},deleted_LB:ls('mtto_deleted_LB')||[]};
-  getAreas().forEach(a=>{ const c=ls('mtto_equipos_'+a.id); if(c) bk.equipos_custom[a.id]=c; });
+async function exportarDatos(){
+  const [areas,registros,cfg,tecnicos]=await Promise.all([getAreas(),getRegistros(),getConfig(),getTecnicos()]);
+  const bk={version:3,fecha:new Date().toISOString(),areas,registros,config:cfg,tecnicos};
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(bk,null,2)],{type:'application/json'})); a.download='mtto_backup_'+new Date().toISOString().split('T')[0]+'.json'; a.click();
 }
-function importarDatos(input){ const f=input.files[0]; if(!f) return; const r=new FileReader(); r.onload=e=>{ try{ const d=JSON.parse(e.target.result); if(!confirm('¿Importar? Esto reemplazará datos actuales.')) return; if(d.areas)lsSet('mtto_areas',d.areas); if(d.registros)lsSet('mtto_registros',d.registros); if(d.config)lsSet('mtto_config',d.config); if(d.equipos_custom) Object.entries(d.equipos_custom).forEach(([k,v])=>lsSet('mtto_equipos_'+k,v)); if(d.deleted_LB)lsSet('mtto_deleted_LB',d.deleted_LB); if(d.tecnicos)lsSet('mtto_tecnicos',d.tecnicos); alert('✅ Importado. Recargando...'); location.reload(); }catch(err){alert('Error: '+err.message);} }; r.readAsText(f); }
+function importarDatos(input){ alert('Importación disponible próximamente. Use el backup JSON para restaurar.'); }
 
 // ═══════════════════════════════════════════════════════
 // TÉCNICOS
@@ -1432,22 +1461,20 @@ function renderTecLista(){
     </table>`;
 }
 
-function agregarTecnico(){
+async function agregarTecnico(){
   const nombre = document.getElementById('tec-nombre').value.trim();
   const cargo  = document.getElementById('tec-cargo').value.trim();
   if(!nombre){ alert('Ingresa el nombre del técnico.'); return; }
   if(!cargo){ alert('Ingresa el cargo del técnico.'); return; }
-  const tecs = getTecnicos();
-  if(tecs.find(t=>t.nombre.toLowerCase()===nombre.toLowerCase())){
-    alert('Ya existe un técnico con ese nombre.'); return;
-  }
-  tecs.push({ id: Date.now(), nombre, cargo });
-  lsSet('mtto_tecnicos', tecs);
-  document.getElementById('tec-nombre').value = '';
-  document.getElementById('tec-cargo').value = '';
-  renderTecLista();
-  populateTecnicoSelect();
-  alert('✅ Técnico agregado');
+  try{
+    await api('POST','/tecnicos',{nombre,cargo});
+    invalidate('tecnicos');
+    document.getElementById('tec-nombre').value = '';
+    document.getElementById('tec-cargo').value = '';
+    await renderTecLista();
+    await populateTecnicoSelect();
+    alert('✅ Técnico agregado');
+  }catch(e){ alert('Error: '+e.message); }
 }
 
 function eliminarTecnico(id){
@@ -1482,28 +1509,23 @@ function toggleSidebar(){
 }
 
 // ── LOGIN ────────────────────────────────────────────
-function doLogin(){
-  const cfg = getConfig();
+async function doLogin(){
   const user = document.getElementById('login-user').value.trim();
   const pass = document.getElementById('login-pass').value;
   const err  = document.getElementById('login-error');
-
   if(!user){ err.textContent='Ingresa tu nombre de usuario.'; return; }
-
-  // Si hay contraseña configurada, validarla; si no, entra directo
-  if(cfg.pass && pass !== cfg.pass){
+  try{
+    await api('POST','/login',{usuario:user, passwd:pass});
+    document.getElementById('login-overlay').classList.add('hidden');
+    err.textContent='';
+  } catch(e){
     err.textContent='Contraseña incorrecta.';
     document.getElementById('login-pass').value='';
-    return;
   }
-
-  document.getElementById('login-overlay').classList.add('hidden');
-  err.textContent='';
 }
 
-function checkLogin(){
-  const cfg = getConfig();
-  // Siempre mostrar login para que el usuario se identifique
+async function checkLogin(){
+  const cfg = await getConfig();
   document.getElementById('login-year').textContent   = cfg.year||'2026';
   document.getElementById('login-empresa').textContent = cfg.empresa||'Planta de Beneficio';
 }
