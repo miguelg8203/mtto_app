@@ -878,10 +878,11 @@ async function getEquipos(areaId){
 }
 
 async function saveEquipo(areaId, eq){
-  if(eq.id && typeof eq.id === 'number' && eq.id < 1e12){
+  if(eq.id && eq.id > 0){
     await api('PUT','/equipos/'+eq.id, {...eq, area_id:areaId});
   } else {
-    await api('POST','/equipos', {...eq, area_id:areaId});
+    const {id, ...sinId} = eq;
+    await api('POST','/equipos', {...sinId, area_id:areaId});
   }
   _cache.equipos[areaId] = null;
 }
@@ -1290,7 +1291,8 @@ async function guardarEquipo(){
   const editId=document.getElementById('eq-edit-id').value;
   if(!desc){ alert('La descripción es requerida'); return; }
   const intervenciones=[...document.querySelectorAll('#eq-freq-list .freq-item')].map(row=>({ frecuencia:row.querySelector('.freq-sel').value, dias_ciclo:FREQ_DIAS[row.querySelector('.freq-sel').value]||30, ultima_fecha:row.querySelector('.freq-fecha').value||null })).filter(iv=>iv.frecuencia);
-  const eq={id:editId?parseInt(editId):null,categoria:cat,descripcion:desc,codigo,intervenciones};
+  const eqId = editId ? parseInt(editId) : 0;
+  const eq={id:eqId,categoria:cat,descripcion:desc,codigo,intervenciones};
   try{ await saveEquipo(aId,eq); await cambiarArea(currentArea); closeEqModal(); alert('✅ Equipo guardado'); }
   catch(e){ alert('Error: '+e.message); }
 }
@@ -1554,6 +1556,10 @@ class EquipoIn(BaseModel):
     codigo:         Optional[str] = ""
     categoria:      str
     intervenciones: Optional[list] = []
+
+    class Config:
+        # Allow extra fields to be ignored
+        extra = "ignore"
 
 class TecnicoIn(BaseModel):
     nombre: str
