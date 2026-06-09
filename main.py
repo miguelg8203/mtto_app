@@ -360,7 +360,7 @@ textarea.form-control{resize:vertical;}
   </div>
   <div class="area-selector">
     <label>&#127970; Área activa</label>
-    <select class="area-select" id="area-select" onchange="cambiarArea(this.value)"></select>
+    <select class="area-select" id="area-select" onchange="_cambiarArea(this.value)"></select>
   </div>
   <div class="sb-nav">
     <div class="nav-item on" onclick="goPage('dashboard',this)"><span class="ico">&#128202;</span> Dashboard</div>
@@ -491,7 +491,7 @@ textarea.form-control{resize:vertical;}
           <option value="PROXIMO">Próximo</option>
           <option value="OK">OK</option>
         </select>
-        <button class="btn-primary" style="margin-left:auto;font-size:12px;padding:5px 14px;" onclick="openEqModal()">+ Nuevo Equipo</button>
+        <button class="btn-primary" style="margin-left:auto;font-size:12px;padding:5px 14px;" onclick="_openEqModal()">+ Nuevo Equipo</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -532,7 +532,7 @@ textarea.form-control{resize:vertical;}
         <div class="form-row">
           <div class="form-group">
             <label>Área</label>
-            <select class="form-control" id="reg-area" onchange="populateRegEquipos()"></select>
+            <select class="form-control" id="reg-area" onchange="_populateRegEquipos()"></select>
           </div>
           <div class="form-group">
             <label>Equipo *</label>
@@ -583,7 +583,7 @@ textarea.form-control{resize:vertical;}
           <div class="foto-preview" id="foto-preview"></div>
         </div>
         <div style="display:flex;gap:8px;">
-          <button class="btn-primary" onclick="guardarRegistro()">&#128190; Guardar Registro</button>
+          <button class="btn-primary" onclick="_guardarRegistro()">&#128190; Guardar Registro</button>
           <button class="btn-secondary" onclick="limpiarForm()">&#10005; Limpiar</button>
         </div>
       </div>
@@ -645,8 +645,8 @@ textarea.form-control{resize:vertical;}
         <div class="stat-card green"><div class="stat-val" id="rp-ok">0</div><div class="stat-lbl">OK</div></div>
       </div>
       <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-        <button class="btn-primary" onclick="exportCSV()">&#128196; Exportar CSV</button>
-        <button class="btn-secondary" onclick="exportPDF()">&#128203; Imprimir / PDF</button>
+        <button class="btn-primary" onclick="_exportCSV()">&#128196; Exportar CSV</button>
+        <button class="btn-secondary" onclick="_exportPDF()">&#128203; Imprimir / PDF</button>
       </div>
       <div class="section-title">Equipos sin intervención registrada</div>
       <div class="table-wrap" id="rp-sin-tabla"></div>
@@ -656,7 +656,7 @@ textarea.form-control{resize:vertical;}
     <div class="page" id="page-areas">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
         <div class="section-title" style="margin-bottom:0;">&#127970; Gestión de Áreas</div>
-        <button class="btn-primary" style="font-size:12px;padding:5px 14px;margin-left:auto;" onclick="openAreaModal()">+ Nueva Área</button>
+        <button class="btn-primary" style="font-size:12px;padding:5px 14px;margin-left:auto;" onclick="_openAreaModal()">+ Nueva Área</button>
       </div>
       <div class="areas-grid" id="areas-grid"></div>
     </div>
@@ -675,7 +675,7 @@ textarea.form-control{resize:vertical;}
             <input type="text" class="form-control" id="cfg-year" value="2026">
           </div>
         </div>
-        <button class="btn-primary" onclick="guardarConfig()">&#128190; Guardar</button>
+        <button class="btn-primary" onclick="_guardarConfig()">&#128190; Guardar</button>
       </div>
       <div class="config-section">
         <h3>&#128274; Contraseña de Supervisor</h3>
@@ -694,7 +694,7 @@ textarea.form-control{resize:vertical;}
           <label>Confirmar contraseña</label>
           <input type="password" class="form-control" id="cfg-pass-confirm" placeholder="Repetir nueva contraseña">
         </div>
-        <button class="btn-primary" onclick="cambiarPassword()">&#128274; Actualizar Contraseña</button>
+        <button class="btn-primary" onclick="_cambiarPassword()">&#128274; Actualizar Contraseña</button>
       </div>
       <div class="config-section">
         <h3>&#128100; Técnicos</h3>
@@ -702,7 +702,7 @@ textarea.form-control{resize:vertical;}
         <div style="display:flex;gap:8px;margin-bottom:14px;">
           <input type="text" class="form-control" id="tec-nombre" placeholder="Nombre completo" style="flex:2;">
           <input type="text" class="form-control" id="tec-cargo" placeholder="Cargo (ej: Técnico, Supervisor...)" style="flex:1;">
-          <button class="btn-primary" onclick="agregarTecnico()" style="white-space:nowrap;">+ Agregar</button>
+          <button class="btn-primary" onclick="_agregarTecnico()" style="white-space:nowrap;">+ Agregar</button>
         </div>
         <div id="tec-lista"></div>
       </div>
@@ -710,7 +710,7 @@ textarea.form-control{resize:vertical;}
         <h3>&#128190; Datos y Respaldo</h3>
         <p style="font-size:12px;color:var(--td);margin-bottom:12px;">Exporta todos los datos de la app o impórtalos desde un respaldo.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn-secondary" onclick="exportarDatos()">&#128229; Exportar datos (JSON)</button>
+          <button class="btn-secondary" onclick="_exportarDatos()">&#128229; Exportar datos (JSON)</button>
           <button class="btn-secondary" onclick="document.getElementById('import-file').click()">&#128228; Importar datos</button>
           <input type="file" id="import-file" accept=".json" style="display:none" onchange="importarDatos(this)">
         </div>
@@ -737,7 +737,7 @@ textarea.form-control{resize:vertical;}
         <label>Contraseña</label>
         <input type="password" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-      <button class="login-btn" onclick="doLogin()">🔐 Ingresar</button>
+      <button class="login-btn" onclick="_doLogin()">🔐 Ingresar</button>
       <div class="login-error" id="login-error"></div>
     </div>
     <div class="login-footer">
@@ -801,9 +801,9 @@ textarea.form-control{resize:vertical;}
       <button class="add-freq-btn" onclick="addFreqRow()">+ Agregar frecuencia</button>
       <input type="hidden" id="eq-edit-id" value="">
       <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="btn-primary" onclick="guardarEquipo()">&#128190; Guardar Equipo</button>
+        <button class="btn-primary" onclick="_guardarEquipo()">&#128190; Guardar Equipo</button>
         <button class="btn-secondary" onclick="closeEqModal()">Cancelar</button>
-        <button class="btn-danger" id="eq-delete-btn" style="margin-left:auto;display:none;" onclick="eliminarEquipo()">&#128465; Eliminar</button>
+        <button class="btn-danger" id="eq-delete-btn" style="margin-left:auto;display:none;" onclick="_eliminarEquipo()">&#128465; Eliminar</button>
       </div>
     </div>
   </div>
@@ -833,9 +833,9 @@ textarea.form-control{resize:vertical;}
       </div>
       <input type="hidden" id="area-edit-id" value="">
       <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="btn-primary" onclick="guardarArea()">&#128190; Guardar</button>
+        <button class="btn-primary" onclick="_guardarArea()">&#128190; Guardar</button>
         <button class="btn-secondary" onclick="closeAreaModal()">Cancelar</button>
-        <button class="btn-danger" id="area-delete-btn" style="margin-left:auto;display:none;" onclick="eliminarArea()">&#128465; Eliminar</button>
+        <button class="btn-danger" id="area-delete-btn" style="margin-left:auto;display:none;" onclick="_eliminarArea()">&#128465; Eliminar</button>
       </div>
     </div>
   </div>
@@ -1026,7 +1026,7 @@ function renderNotifs(){
   document.getElementById('notif-dot').classList.toggle('on',items.length>0);
   document.getElementById('nb-alertas').textContent=items.filter(i=>i.iv.estado==='VENCIDO').length;
   const html=items.slice(0,15).map(({eq,iv})=>`
-    <div class="notif-item ${iv.estado==='VENCIDO'?'ni-red':'ni-yellow'}" onclick="showModal_area('${currentArea}',${eq.id});toggleNotif();">
+    <div class="notif-item ${iv.estado==='VENCIDO'?'ni-red':'ni-yellow'}" onclick="_showModal('${currentArea}',${eq.id});toggleNotif();">
       <div class="notif-title">${eq.descripcion.substring(0,52)}${eq.descripcion.length>52?'...':''}</div>
       <div class="notif-sub">${iv.frecuencia} · ${iv.estado==='VENCIDO'?Math.abs(iv.dias_para_proxima)+'d VENCIDO':iv.dias_para_proxima+'d restantes'}</div>
     </div>`).join('');
@@ -1063,7 +1063,7 @@ function renderDashboard(){
   recalc.forEach(e=>e.intervenciones.forEach(i=>{ if(i.estado==='VENCIDO') urg.push({eq:e,iv:i}); }));
   urg.sort((a,b)=>a.iv.dias_para_proxima-b.iv.dias_para_proxima);
   document.getElementById('dash-urgent').innerHTML=urg.slice(0,8).map(({eq,iv})=>`
-    <div class="alert-card" onclick="showModal_area('${currentArea}',${eq.id})">
+    <div class="alert-card" onclick="_showModal('${currentArea}',${eq.id})">
       <div class="alert-header"><span class="cat-badge cat-${eq.categoria.toLowerCase()}">${eq.categoria}</span>
       <div class="alert-title">${eq.descripcion.substring(0,68)}${eq.descripcion.length>68?'...':''}</div>
       <span class="dias-num dias-red">${Math.abs(iv.dias_para_proxima)}d vencido</span></div>
@@ -1084,7 +1084,7 @@ function renderAlertas(){
   items.sort((a,b)=>a.iv.dias_para_proxima-b.iv.dias_para_proxima);
   const colors={VENCIDO:'',PROXIMO:'yellow',OK:'green'};
   document.getElementById('alert-list').innerHTML=items.map(({eq,iv})=>`
-    <div class="alert-card ${colors[iv.estado]||''}" onclick="showModal_area('${currentArea}',${eq.id})">
+    <div class="alert-card ${colors[iv.estado]||''}" onclick="_showModal('${currentArea}',${eq.id})">
       <div class="alert-header"><span class="cat-badge cat-${eq.categoria.toLowerCase()}">${eq.categoria}</span>
       <div class="alert-title">${eq.descripcion.substring(0,62)}${eq.descripcion.length>62?'...':''}</div>
       <span class="status-badge st-${iv.estado.toLowerCase()}">${iv.estado}</span></div>
@@ -1117,7 +1117,7 @@ function renderEquipos(){
       <td style="font-size:11px;">${iv?fmtDate(iv.ultima_fecha):'--'}</td>
       <td style="font-size:11px;">${iv?fmtDate(iv.proxima_fecha):'--'}</td>
       <td>${dias}</td><td><span class="status-badge ${stC}">${stL}</span></td>
-      <td style="white-space:nowrap;"><button class="btn-det" onclick="showModal_area('${currentArea}',${eq.id})">Ver</button> <button class="btn-icon" onclick="openEqModal(${eq.id})" title="Editar">✏️</button></td>
+      <td style="white-space:nowrap;"><button class="btn-det" onclick="_showModal('${currentArea}',${eq.id})">Ver</button> <button class="btn-icon" onclick="_openEqModal(${eq.id})" title="Editar">✏️</button></td>
     </tr>`;
   }).join('')||'<tr><td colspan="8" class="empty">Sin resultados</td></tr>';
   document.getElementById('eq-info').textContent=`${total} registros (pág ${eqPage}/${pages})`;
@@ -1165,13 +1165,14 @@ function showCalDay(day,month,year){
   if(!items.length) return;
   const ms=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   document.getElementById('cal-day-detail').innerHTML=`<div class="section-title">📅 ${day} ${ms[month-1]} ${year} — ${items.length} intervención${items.length>1?'es':''}</div>
-  <div class="alert-list">${items.map(({eq,iv})=>`<div class="alert-card ${iv.estado==='PROXIMO'?'yellow':iv.estado==='OK'?'green':''}" onclick="showModal_area('${currentArea}',${eq.id})">
+  <div class="alert-list">${items.map(({eq,iv})=>`<div class="alert-card ${iv.estado==='PROXIMO'?'yellow':iv.estado==='OK'?'green':''}" onclick="_showModal('${currentArea}',${eq.id})">
     <div class="alert-header"><span class="cat-badge cat-${eq.categoria.toLowerCase()}">${eq.categoria}</span><div class="alert-title">${eq.descripcion.substring(0,58)}</div><span class="status-badge st-${iv.estado.toLowerCase()}">${iv.estado}</span></div>
     <div class="alert-meta"><span>⏱ ${iv.frecuencia}</span><span>📅 ${fmtDate(iv.ultima_fecha)}</span></div></div>`).join('')}</div>`;
 }
 
-function showModal_area(areaId,eqId){
-  const eq=getEquipos(areaId).find(e=>e.id===eqId); if(!eq) return;
+async function showModal_area(areaId,eqId){
+  const equipos=await getEquipos(areaId);
+  const eq=equipos.find(e=>e.id===eqId); if(!eq) return;
   const eqR={...eq,intervenciones:calcIntervenciones(eq.intervenciones)};
   document.getElementById('modal-title').textContent=eqR.descripcion;
   document.getElementById('modal-code').textContent=eqR.codigo||'Sin código';
@@ -1196,8 +1197,8 @@ function showModal_area(areaId,eqId){
     </div>`).join('');
   }
   html+=`<div style="margin-top:16px;display:flex;gap:8px;">
-    <button class="btn-primary" onclick="irRegistrar('${areaId}',${eqId})">📝 Registrar</button>
-    <button class="btn-secondary" onclick="openEqModal(${eqId})">✏️ Editar</button>
+    <button class="btn-primary" onclick="_irRegistrar('${areaId}',${eqId})">📝 Registrar</button>
+    <button class="btn-secondary" onclick="_openEqModal(${eqId})">✏️ Editar</button>
   </div>`;
   document.getElementById('modal-body').innerHTML=html;
   document.getElementById('modal-overlay').classList.add('on');
@@ -1205,7 +1206,7 @@ function showModal_area(areaId,eqId){
 function closeModal(e){ if(!e||e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('on'); }
 function openFotoModal(src){ document.getElementById('foto-modal-img').src=src; document.getElementById('foto-modal-overlay').classList.add('on'); }
 function closeFotoModal(e){ if(!e||e.target===document.getElementById('foto-modal-overlay')) document.getElementById('foto-modal-overlay').classList.remove('on'); }
-function irRegistrar(areaId,eqId){ closeModal(); document.getElementById('reg-area').value=areaId; populateRegEquipos(); setTimeout(()=>document.getElementById('reg-equipo').value=eqId,80); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on')); goPage('registro',document.querySelectorAll('.nav-item')[4]); }
+async function irRegistrar(areaId,eqId){ closeModal(); document.getElementById('reg-area').value=areaId; await populateRegEquipos(); setTimeout(()=>document.getElementById('reg-equipo').value=eqId,80); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on')); goPage('registro',document.querySelectorAll('.nav-item')[4]); }
 
 async function populateRegEquipos(){
   await populateTecnicoSelect();
@@ -1257,8 +1258,8 @@ async function renderRegistros(){
   </tr>`).join('')||'<tr><td colspan="6" class="empty" style="padding:20px;">Sin registros</td></tr>';
 }
 
-function openEqModal(eqId){
-  const areas=getAreas();
+async function openEqModal(eqId){
+  const areas=await getAreas();
   document.getElementById('eq-area-sel').innerHTML=areas.map(a=>`<option value="${a.id}">${a.icono} ${a.nombre}</option>`).join('');
   document.getElementById('eq-area-sel').value=currentArea;
   document.getElementById('eq-freq-list').innerHTML='';
@@ -1304,17 +1305,17 @@ async function renderAreas(){
   const eqsAll=await Promise.all(areas.map(a=>getEquipos(a.id)));
   document.getElementById('areas-grid').innerHTML=areas.map((a,idx)=>{
     const eqs=eqsAll[idx], v=countVencidos(eqs);
-    return `<div class="area-card ${a.id===currentArea?'active-area':''}" style="border-top:3px solid ${a.color};" onclick="cambiarArea('${a.id}');goPage('dashboard',document.querySelector('.nav-item'))">
+    return `<div class="area-card ${a.id===currentArea?'active-area':''}" style="border-top:3px solid ${a.color};" onclick="_cambiarArea('${a.id}');goPage('dashboard',document.querySelector('.nav-item'))">
       <div class="area-card-actions"><button class="btn-icon" onclick="event.stopPropagation();openAreaModal('${a.id}')" title="Editar">✏️</button></div>
       <div class="area-card-icon">${a.icono}</div><div class="area-card-name">${a.nombre}</div>
       <div class="area-card-count">${eqs.length} equipos${v>0?` · <span style="color:var(--red);">${v} vencidos</span>`:''}</div>
     </div>`;
   }).join('');
 }
-function openAreaModal(aId){
+async function openAreaModal(aId){
   document.getElementById('area-nombre').value=''; document.getElementById('area-icono').value='🏭'; document.getElementById('area-color').value='#3b82f6';
   document.getElementById('area-edit-id').value=''; document.getElementById('area-delete-btn').style.display='none'; document.getElementById('area-modal-title').textContent='Nueva Área';
-  if(aId){ const a=getAreas().find(x=>x.id===aId); if(!a) return; document.getElementById('area-nombre').value=a.nombre; document.getElementById('area-icono').value=a.icono; document.getElementById('area-color').value=a.color; document.getElementById('area-edit-id').value=aId; document.getElementById('area-delete-btn').style.display=''; document.getElementById('area-modal-title').textContent='Editar Área'; }
+  if(aId){ const areas=await getAreas(); const a=areas.find(x=>x.id===aId); if(!a) return; document.getElementById('area-nombre').value=a.nombre; document.getElementById('area-icono').value=a.icono; document.getElementById('area-color').value=a.color; document.getElementById('area-edit-id').value=aId; document.getElementById('area-delete-btn').style.display=''; document.getElementById('area-modal-title').textContent='Editar Área'; }
   document.getElementById('area-modal-overlay').classList.add('on');
 }
 async function guardarArea(){
@@ -1381,9 +1382,10 @@ function exportCSV(){
   const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,\\uFEFF'+encodeURIComponent(csv); a.download='mantenimiento_2026.csv'; a.click();
 }
 
-function exportPDF(){
-  const areas=getAreas(), cfg=getConfig(); let v=0,p=0,ok=0,totalEq=0;
-  const rows=areas.map(a=>{ const eqs=getEquipos(a.id); totalEq+=eqs.length; return eqs.map(e=>{ const ivs=calcIntervenciones(e.intervenciones); if(!ivs.length) return `<tr><td>${a.nombre}</td><td>${e.categoria}</td><td>${e.descripcion.substring(0,52)}</td><td>--</td><td>--</td><td>--</td><td>SIN DATOS</td></tr>`; return ivs.map(iv=>{ if(iv.estado==='VENCIDO')v++;else if(iv.estado==='PROXIMO')p++;else if(iv.estado==='OK')ok++; return `<tr><td>${a.nombre}</td><td>${e.categoria}</td><td style="font-size:10px;">${e.descripcion.substring(0,52)}</td><td>${iv.frecuencia}</td><td>${iv.ultima_fecha||'--'}</td><td>${iv.proxima_fecha||'--'}</td><td style="color:${iv.estado==='VENCIDO'?'red':iv.estado==='PROXIMO'?'orange':'green'};font-weight:bold;">${iv.estado}</td></tr>`; }).join(''); }).join(''); }).join('');
+async function exportPDF(){
+  const areas=await getAreas(), cfg=await getConfig(); let v=0,p=0,ok=0,totalEq=0;
+  const eqsAll=await Promise.all(areas.map(a=>getEquipos(a.id)));
+  const rows=areas.map((a,idx)=>{ const eqs=eqsAll[idx]; totalEq+=eqs.length; return eqs.map(e=>{ const ivs=calcIntervenciones(e.intervenciones); if(!ivs.length) return `<tr><td>${a.nombre}</td><td>${e.categoria}</td><td>${e.descripcion.substring(0,52)}</td><td>--</td><td>--</td><td>--</td><td>SIN DATOS</td></tr>`; return ivs.map(iv=>{ if(iv.estado==='VENCIDO')v++;else if(iv.estado==='PROXIMO')p++;else if(iv.estado==='OK')ok++; return `<tr><td>${a.nombre}</td><td>${e.categoria}</td><td style="font-size:10px;">${e.descripcion.substring(0,52)}</td><td>${iv.frecuencia}</td><td>${iv.ultima_fecha||'--'}</td><td>${iv.proxima_fecha||'--'}</td><td style="color:${iv.estado==='VENCIDO'?'red':iv.estado==='PROXIMO'?'orange':'green'};font-weight:bold;">${iv.estado}</td></tr>`; }).join(''); }).join(''); }).join('');
   const win=window.open('','_blank');
   win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Reporte Mantenimiento ${cfg.year||2026}</title><style>body{font-family:Arial,sans-serif;padding:16px;font-size:11px;}h1{color:#1e3a5f;font-size:16px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th{background:#1e3a5f;color:#fff;padding:5px 7px;font-size:10px;text-align:left;}td{border:1px solid #ddd;padding:4px 7px;}.st{display:flex;gap:16px;margin:8px 0;padding:8px;background:#f5f5f5;border-radius:4px;}.sv{text-align:center;}.sv b{font-size:20px;display:block;}.login-overlay{position:fixed;inset:0;background:#0a0c10;z-index:9999;display:flex;align-items:center;justify-content:center;}
 .login-overlay.hidden{display:none;}
@@ -1457,7 +1459,7 @@ function renderTecLista(){
           <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;background:${t.cargo==='Supervisor'?'rgba(139,92,246,.15)':'rgba(59,130,246,.15)'};color:${t.cargo==='Supervisor'?'var(--purple)':'var(--blue)'};">${t.cargo}</span>
         </td>
         <td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;">
-          <button class="btn-icon del" onclick="eliminarTecnico(${t.id})" title="Eliminar">🗑</button>
+          <button class="btn-icon del" onclick="_eliminarTecnico(${t.id})" title="Eliminar">🗑</button>
         </td>
       </tr>`).join('')}</tbody>
     </table>`;
@@ -1509,6 +1511,27 @@ function toggleSidebar(){
   btn.textContent = sb.classList.contains('collapsed') ? '❯' : '❮';
   btn.title = sb.classList.contains('collapsed') ? 'Expandir menú' : 'Colapsar menú';
 }
+
+// ── SYNC WRAPPERS FOR ONCLICK ────────────────────────────────────────────────
+function _openEqModal(id){ openEqModal(id); }
+function _showModal(areaId,eqId){ showModal_area(areaId,eqId); }
+function _openAreaModal(id){ openAreaModal(id); }
+function _guardarEquipo(){ guardarEquipo(); }
+function _eliminarEquipo(){ eliminarEquipo(); }
+function _guardarArea(){ guardarArea(); }
+function _eliminarArea(){ eliminarArea(); }
+function _guardarRegistro(){ guardarRegistro(); }
+function _guardarConfig(){ guardarConfig(); }
+function _cambiarPassword(){ cambiarPassword(); }
+function _cambiarArea(id){ cambiarArea(id).then(()=>{}); }
+function _agregarTecnico(){ agregarTecnico(); }
+function _eliminarTecnico(id){ eliminarTecnico(id); }
+function _exportCSV(){ exportCSV(); }
+function _exportPDF(){ exportPDF(); }
+function _exportarDatos(){ exportarDatos(); }
+function _irRegistrar(a,e){ irRegistrar(a,e); }
+function _doLogin(){ doLogin(); }
+function _populateRegEquipos(){ populateRegEquipos(); }
 
 // ── LOGIN ────────────────────────────────────────────
 async function doLogin(){
