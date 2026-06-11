@@ -1,36 +1,71 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-import json, os
+import os, json
 
 app = FastAPI()
 
-TECS_FILE = "tecnicos.json"
-def load_tecs():
+# ── PostgreSQL via psycopg2 ───────────────────────────────────────────────────
+import psycopg2
+from psycopg2.extras import RealDictCursor
+
+def get_conn():
+    url = os.environ.get("DATABASE_URL","")
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://","postgresql://",1)
+    return psycopg2.connect(url, cursor_factory=RealDictCursor)
+
+def init_db():
     try:
-        if os.path.exists(TECS_FILE):
-            with open(TECS_FILE) as f: return json.load(f)
-    except: pass
-    return []
-def save_tecs(data):
-    with open(TECS_FILE, 'w') as f: json.dump(data, f)
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS tecnicos (
+                id SERIAL PRIMARY KEY,
+                nombre TEXT NOT NULL,
+                cargo TEXT NOT NULL
+            )
+        """)
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        print("DB init error:", e)
+
+init_db()
 
 class TecnicoIn(BaseModel):
     nombre: str
     cargo: str
 
 @app.get("/api/tecnicos")
-def get_tecnicos(): return load_tecs()
+def get_tecnicos():
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("SELECT * FROM tecnicos ORDER BY id")
+        rows = cur.fetchall(); cur.close(); conn.close()
+        return [dict(r) for r in rows]
+    except Exception as e:
+        return []
 
 @app.post("/api/tecnicos")
 def create_tecnico(data: TecnicoIn):
-    tecs = load_tecs()
-    tec = {"id": max((t["id"] for t in tecs), default=0)+1, "nombre": data.nombre, "cargo": data.cargo}
-    tecs.append(tec); save_tecs(tecs); return tec
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("INSERT INTO tecnicos (nombre, cargo) VALUES (%s, %s) RETURNING *",
+                    (data.nombre, data.cargo))
+        row = dict(cur.fetchone()); conn.commit(); cur.close(); conn.close()
+        return row
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 @app.delete("/api/tecnicos/{tec_id}")
 def delete_tecnico(tec_id: int):
-    save_tecs([t for t in load_tecs() if t["id"] != tec_id]); return {"ok": True}
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("DELETE FROM tecnicos WHERE id=%s", (tec_id,))
+        conn.commit(); cur.close(); conn.close()
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 HTML = """<!DOCTYPE html>
 <html lang="es">
