@@ -1459,7 +1459,7 @@ function importarDatos(input){ const f=input.files[0]; if(!f) return; const r=ne
 // TÉCNICOS
 // ═══════════════════════════════════════════════════════
 async function getTecnicos(){
-  try{ const r=await fetch('/api/tecnicos'); return await r.json(); }
+  try{ const r=await fetch('/api/tecnicos'); const d=await r.json(); return Array.isArray(d)?d:[]; }
   catch(e){ return ls('mtto_tecnicos')||[]; }
 }
 
