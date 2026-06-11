@@ -585,6 +585,7 @@ textarea.form-control{resize:vertical;}
             <th style="padding:10px 14px;font-size:11px;color:var(--td);text-align:left;">Técnico</th>
             <th style="padding:10px 14px;font-size:11px;color:var(--td);text-align:left;">Obs.</th>
             <th style="padding:10px 14px;font-size:11px;color:var(--td);text-align:left;">Fotos</th>
+            <th style="padding:10px 14px;font-size:11px;color:var(--td);text-align:left;"></th>
           </tr></thead>
           <tbody id="reg-tbody"></tbody>
         </table>
@@ -824,6 +825,52 @@ textarea.form-control{resize:vertical;}
         <button class="btn-primary" onclick="guardarArea()">&#128190; Guardar</button>
         <button class="btn-secondary" onclick="closeAreaModal()">Cancelar</button>
         <button class="btn-danger" id="area-delete-btn" style="margin-left:auto;display:none;" onclick="eliminarArea()">&#128465; Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR REGISTRO -->
+<div class="modal-overlay" id="reg-edit-overlay" onclick="closeRegEdit(event)">
+  <div class="modal" style="width:520px;">
+    <div class="modal-header">
+      <div class="modal-title"><h3>✏️ Editar Registro</h3></div>
+      <button class="modal-close" onclick="closeRegEdit()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="reg-edit-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha *</label>
+          <input type="date" class="form-control" id="reg-edit-fecha">
+        </div>
+        <div class="form-group">
+          <label>Frecuencia *</label>
+          <select class="form-control" id="reg-edit-freq">
+            <option value="MENSUAL">Mensual</option>
+            <option value="BIMENSUAL">Bimensual</option>
+            <option value="TRIMESTRAL">Trimestral</option>
+            <option value="CUATRIMESTRAL">Cuatrimestral</option>
+            <option value="SEMESTRAL">Semestral</option>
+            <option value="ANUAL">Anual</option>
+            <option value="BIANUAL">Bianual</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Técnico</label>
+          <input type="text" class="form-control" id="reg-edit-tecnico" placeholder="Nombre del técnico">
+        </div>
+        <div class="form-group">
+          <label>Observaciones</label>
+          <input type="text" class="form-control" id="reg-edit-obs" placeholder="Descripción del trabajo...">
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn-primary" onclick="guardarEditReg()">&#128190; Guardar</button>
+        <button class="btn-secondary" onclick="closeRegEdit()">Cancelar</button>
+        <button class="btn-danger" style="margin-left:auto;" onclick="eliminarRegistro()">&#128465; Eliminar</button>
       </div>
     </div>
   </div>
@@ -1234,6 +1281,7 @@ function renderRegistros(){
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${r.tecnico||'--'}</td>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);color:var(--td);">${r.obs||'--'}</td>
     <td style="padding:8px 14px;border-top:1px solid var(--bd);">${r.fotos&&r.fotos.length?r.fotos.map(f=>`<img src="${f}" style="width:30px;height:30px;object-fit:cover;border-radius:3px;cursor:pointer;border:1px solid var(--bd);margin-right:2px;" onclick="openFotoModal('${f}')">`).join(''):'--'}</td>
+    <td style="padding:8px 14px;border-top:1px solid var(--bd);"><button class="btn-icon" onclick="editarRegistro(${r.id})" title="Editar">✏️</button></td>
   </tr>`).join('')||'<tr><td colspan="6" class="empty" style="padding:20px;">Sin registros</td></tr>';
 }
 
@@ -1565,6 +1613,56 @@ document.addEventListener('click', function(e){
     dd.style.display = 'none';
   }
 });
+
+// ── EDITAR REGISTRO ───────────────────────────────────
+function editarRegistro(id){
+  const regs = getRegistros();
+  const r = regs.find(x=>x.id===id);
+  if(!r){ alert('Registro no encontrado'); return; }
+  document.getElementById('reg-edit-id').value = id;
+  document.getElementById('reg-edit-fecha').value = r.fecha;
+  document.getElementById('reg-edit-freq').value = r.frecuencia;
+  document.getElementById('reg-edit-tecnico').value = r.tecnico||'';
+  document.getElementById('reg-edit-obs').value = r.obs||'';
+  document.getElementById('reg-edit-overlay').classList.add('on');
+}
+
+function guardarEditReg(){
+  const id = parseInt(document.getElementById('reg-edit-id').value);
+  const regs = getRegistros();
+  const idx = regs.findIndex(x=>x.id===id);
+  if(idx<0) return;
+  regs[idx].fecha      = document.getElementById('reg-edit-fecha').value;
+  regs[idx].frecuencia = document.getElementById('reg-edit-freq').value;
+  regs[idx].tecnico    = document.getElementById('reg-edit-tecnico').value;
+  regs[idx].obs        = document.getElementById('reg-edit-obs').value;
+  lsSet('mtto_registros', regs);
+  // Update equipo ultima_fecha
+  const r = regs[idx];
+  const eq = getEquipos(r.area_id).find(e=>e.id==r.equipo_id);
+  if(eq){
+    const intervs=(eq.intervenciones||[]).map(iv=>iv.frecuencia===r.frecuencia?{...iv,ultima_fecha:r.fecha}:iv);
+    saveEquipo(r.area_id,{...eq,intervenciones:intervs});
+    cambiarArea(currentArea);
+  }
+  closeRegEdit();
+  renderRegistros();
+  alert('✅ Registro actualizado');
+}
+
+function eliminarRegistro(){
+  const id = parseInt(document.getElementById('reg-edit-id').value);
+  if(!confirm('¿Eliminar este registro?')) return;
+  lsSet('mtto_registros', getRegistros().filter(x=>x.id!==id));
+  closeRegEdit();
+  renderRegistros();
+  cambiarArea(currentArea);
+}
+
+function closeRegEdit(e){
+  if(!e||e.target===document.getElementById('reg-edit-overlay'))
+    document.getElementById('reg-edit-overlay').classList.remove('on');
+}
 
 </script>
 </body>
