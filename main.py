@@ -1587,8 +1587,8 @@ async function populateTecnicoSelect(){
   sel.innerHTML = '<option value="">-- Seleccionar técnico --</option>';
   tecs.forEach(t=>{
     const op = document.createElement('option');
-    op.value = t.nombre + ' (' + t.cargo + ')';
-    op.textContent = t.nombre + ' — ' + t.cargo;
+    op.value = t.nombre;
+    op.textContent = t.nombre;
     sel.appendChild(op);
   });
   if(current) sel.value = current;
