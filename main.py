@@ -361,6 +361,7 @@ textarea.form-control{resize:vertical;}
     <div class="nav-item" onclick="goPage('reportes',this)"><span class="ico">&#128196;</span> Reportes</div>
     <div class="nav-sep"></div>
     <div class="nav-item" onclick="goPage('areas',this)"><span class="ico">&#127970;</span> Áreas</div>
+    <div class="nav-item" onclick="goPage('tecnicos',this)"><span class="ico">&#128100;</span> Técnicos</div>
     <div class="nav-item" onclick="goPage('config',this)"><span class="ico">&#9881;</span> Config</div>
   </div>
   <div class="sb-footer">
@@ -650,6 +651,23 @@ textarea.form-control{resize:vertical;}
       <div class="areas-grid" id="areas-grid"></div>
     </div>
 
+    <!-- TECNICOS -->
+    <div class="page" id="page-tecnicos">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <div class="section-title" style="margin-bottom:0;">&#128100; Técnicos</div>
+      </div>
+      <div class="config-section">
+        <h3>&#128100; Agregar Técnico</h3>
+        <p style="font-size:12px;color:var(--td);margin-bottom:12px;">Gestiona el personal que realiza las intervenciones.</p>
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <input type="text" class="form-control" id="tec-nombre" placeholder="Nombre completo" style="flex:2;">
+          <input type="text" class="form-control" id="tec-cargo" placeholder="Cargo (ej: Técnico, Supervisor...)" style="flex:1;">
+          <button class="btn-primary" onclick="agregarTecnico()" style="white-space:nowrap;">+ Agregar</button>
+        </div>
+        <div id="tec-lista"></div>
+      </div>
+    </div>
+
     <!-- CONFIG -->
     <div class="page" id="page-config">
       <div class="config-section">
@@ -685,16 +703,7 @@ textarea.form-control{resize:vertical;}
         </div>
         <button class="btn-primary" onclick="cambiarPassword()">&#128274; Actualizar Contraseña</button>
       </div>
-      <div class="config-section">
-        <h3>&#128100; Técnicos</h3>
-        <p style="font-size:12px;color:var(--td);margin-bottom:12px;">Gestiona el personal que realiza las intervenciones.</p>
-        <div style="display:flex;gap:8px;margin-bottom:14px;">
-          <input type="text" class="form-control" id="tec-nombre" placeholder="Nombre completo" style="flex:2;">
-          <input type="text" class="form-control" id="tec-cargo" placeholder="Cargo (ej: Técnico, Supervisor...)" style="flex:1;">
-          <button class="btn-primary" onclick="agregarTecnico()" style="white-space:nowrap;">+ Agregar</button>
-        </div>
-        <div id="tec-lista"></div>
-      </div>
+
       <div class="config-section">
         <h3>&#128190; Datos y Respaldo</h3>
         <p style="font-size:12px;color:var(--td);margin-bottom:12px;">Exporta todos los datos de la app o impórtalos desde un respaldo.</p>
@@ -1004,13 +1013,14 @@ function goPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
   document.getElementById('page-'+id).classList.add('on');
-  const titles={dashboard:'Dashboard',alertas:'Alertas',equipos:'Equipos',calendario:'Calendario',registro:'Registrar Intervención',graficas:'Gráficas',reportes:'Reportes',areas:'Áreas',config:'Configuración'};
+  const titles={dashboard:'Dashboard',alertas:'Alertas',equipos:'Equipos',calendario:'Calendario',registro:'Registrar Intervención',graficas:'Gráficas',reportes:'Reportes',areas:'Áreas',tecnicos:'Técnicos',config:'Configuración'};
   document.getElementById('page-title').textContent=titles[id]||id;
   if(el) el.classList.add('on');
   if(id==='graficas') renderGraficas();
   if(id==='areas') renderAreas();
   if(id==='reportes') renderReportes();
-  if(id==='config'){ renderTecLista(); populateTecnicoSelect(); }
+  if(id==='config'){ }
+  if(id==='tecnicos'){ renderTecLista(); populateTecnicoSelect(); }
 }
 
 function doSearch(q){ searchQ=q.toLowerCase(); renderEquipos(); }
