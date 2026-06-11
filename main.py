@@ -522,11 +522,14 @@ textarea.form-control{resize:vertical;}
             <label>Área</label>
             <select class="form-control" id="reg-area" onchange="populateRegEquipos()"></select>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="position:relative;">
             <label>Equipo *</label>
-            <select class="form-control" id="reg-equipo">
-              <option value="">-- Seleccionar equipo --</option>
-            </select>
+            <input type="text" class="form-control" id="reg-equipo-search" 
+              placeholder="Buscar equipo..." 
+              oninput="filtrarEquipos(this.value)"
+              autocomplete="off">
+            <input type="hidden" id="reg-equipo">
+            <div id="eq-dropdown" style="display:none;position:absolute;z-index:999;background:var(--s1);border:1px solid var(--bd);border-radius:6px;max-height:200px;overflow-y:auto;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.4);"></div>
           </div>
         </div>
         <div class="form-row">
@@ -1217,7 +1220,7 @@ function guardarRegistro(){
   fotosPendientes=[]; renderFotoPreview(); limpiarForm(); renderRegistros();
   alert('✅ Registro guardado');
 }
-function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-fecha').value='2026-06-06'; fotosPendientes=[]; renderFotoPreview(); }
+function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-equipo-search').value=''; document.getElementById('eq-dropdown').style.display='none'; document.getElementById('reg-fecha').value='2026-06-06'; fotosPendientes=[]; renderFotoPreview(); }
 function renderRegistros(){
   document.getElementById('reg-tbody').innerHTML=getRegistros().slice().reverse().map(r=>`<tr>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${fmtDate(r.fecha)}</td>
@@ -1495,6 +1498,53 @@ function checkLogin(){
   document.getElementById('login-year').textContent   = cfg.year||'2026';
   document.getElementById('login-empresa').textContent = cfg.empresa||'Planta de Beneficio';
 }
+
+// ── BUSCADOR DE EQUIPOS ───────────────────────────────
+let _equiposReg = [];
+
+function populateRegEquipos(){
+  populateTecnicoSelect();
+  const aId = document.getElementById('reg-area').value || currentArea;
+  _equiposReg = getEquipos(aId);
+  document.getElementById('reg-equipo').value = '';
+  document.getElementById('reg-equipo-search').value = '';
+  document.getElementById('eq-dropdown').style.display = 'none';
+}
+
+function filtrarEquipos(q){
+  const dropdown = document.getElementById('eq-dropdown');
+  document.getElementById('reg-equipo').value = '';
+  if(!q || q.length < 1){ dropdown.style.display='none'; return; }
+  const ql = q.toLowerCase();
+  const matches = _equiposReg.filter(e =>
+    e.descripcion.toLowerCase().includes(ql) ||
+    (e.codigo||'').toLowerCase().includes(ql)
+  ).slice(0, 15);
+  if(!matches.length){ dropdown.style.display='none'; return; }
+  dropdown.innerHTML = matches.map(e => `
+    <div onclick="seleccionarEquipo(${e.id},'${e.descripcion.replace(/'/g,"\\'")}','${(e.codigo||'').replace(/'/g,"\\'")}') "
+      style="padding:8px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--bd);transition:background .1s;"
+      onmouseover="this.style.background='var(--s2)'" onmouseout="this.style.background=''">
+      <span style="color:var(--tb);font-weight:600;">${e.descripcion.substring(0,55)}</span>
+      ${e.codigo ? `<span style="font-size:10px;color:var(--td);margin-left:6px;font-family:var(--mono);">${e.codigo}</span>` : ''}
+    </div>`).join('');
+  dropdown.style.display = 'block';
+}
+
+function seleccionarEquipo(id, desc, codigo){
+  document.getElementById('reg-equipo').value = id;
+  document.getElementById('reg-equipo-search').value = codigo ? `[${codigo}] ${desc}` : desc;
+  document.getElementById('eq-dropdown').style.display = 'none';
+}
+
+// Cerrar dropdown al hacer clic fuera
+document.addEventListener('click', function(e){
+  const dd = document.getElementById('eq-dropdown');
+  const inp = document.getElementById('reg-equipo-search');
+  if(dd && inp && !dd.contains(e.target) && e.target !== inp){
+    dd.style.display = 'none';
+  }
+});
 
 </script>
 </body>
