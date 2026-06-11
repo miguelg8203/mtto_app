@@ -522,16 +522,11 @@ textarea.form-control{resize:vertical;}
             <label>Área</label>
             <select class="form-control" id="reg-area" onchange="populateRegEquipos()"></select>
           </div>
-          <div class="form-group" style="position:relative;">
+          <div class="form-group">
             <label>Equipo *</label>
-            <input type="text" class="form-control" id="reg-equipo-search" 
-              placeholder="Buscar equipo por nombre o código..." 
-              oninput="filtrarEquipos(this.value)"
-              onfocus="cargarEquiposReg()"
-              autocomplete="off">
-            <input type="hidden" id="reg-equipo">
-            <select id="reg-equipo-hidden" style="display:none;"></select>
-            <div id="eq-dropdown" style="display:none;position:absolute;z-index:999;background:var(--s1);border:1px solid var(--bd);border-radius:6px;max-height:220px;overflow-y:auto;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.5);"></div>
+            <select class="form-control" id="reg-equipo">
+              <option value="">-- Seleccionar equipo --</option>
+            </select>
           </div>
         </div>
         <div class="form-row">
@@ -1230,7 +1225,7 @@ function guardarRegistro(){
   fotosPendientes=[]; renderFotoPreview(); limpiarForm(); renderRegistros();
   alert('✅ Registro guardado');
 }
-function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-equipo-search').value=''; document.getElementById('eq-dropdown').style.display='none'; document.getElementById('reg-fecha').value='2026-06-06'; fotosPendientes=[]; renderFotoPreview(); }
+function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-fecha').value='2026-06-06'; fotosPendientes=[]; renderFotoPreview(); }
 function renderRegistros(){
   document.getElementById('reg-tbody').innerHTML=getRegistros().slice().reverse().map(r=>`<tr>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${fmtDate(r.fecha)}</td>
@@ -1512,31 +1507,11 @@ function checkLogin(){
 // ── BUSCADOR DE EQUIPOS ───────────────────────────────
 let _equiposReg = [];
 
-function cargarEquiposReg(){
-  const aId = document.getElementById('reg-area').value || currentArea;
-  _equiposReg = getEquipos(aId);
-  // Mostrar todos al hacer foco si el campo está vacío
-  const q = document.getElementById('reg-equipo-search').value;
-  if(!q) filtrarEquipos('');
-}
-
 function populateRegEquipos(){
   populateTecnicoSelect();
-  const aId = document.getElementById('reg-area').value || currentArea;
-  // Fill hidden select (original behavior)
-  const s = document.getElementById('reg-equipo-hidden');
-  s.innerHTML = '<option value="">-- Seleccionar --</option>';
-  getEquipos(aId).forEach(e=>{
-    const o = document.createElement('option');
-    o.value = e.id;
-    o.textContent = e.codigo ? `[${e.codigo}] ${e.descripcion}` : e.descripcion;
-    s.appendChild(o);
-  });
-  // Also fill _equiposReg for search
-  _equiposReg = getEquipos(aId);
-  document.getElementById('reg-equipo').value = '';
-  document.getElementById('reg-equipo-search').value = '';
-  document.getElementById('eq-dropdown').style.display = 'none';
+  const aId=document.getElementById('reg-area').value||currentArea;
+  const s=document.getElementById('reg-equipo'); s.innerHTML='<option value="">-- Seleccionar equipo --</option>';
+  getEquipos(aId).forEach(e=>{ const o=document.createElement('option'); o.value=e.id; o.textContent=e.codigo?`[${e.codigo}] ${e.descripcion.substring(0,44)}`:e.descripcion.substring(0,52); s.appendChild(o); });
 }
 
 function filtrarEquipos(q){
