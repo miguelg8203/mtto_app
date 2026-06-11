@@ -11,6 +11,8 @@ from psycopg2.extras import RealDictCursor
 
 def get_conn():
     url = os.environ.get("DATABASE_URL","")
+    if not url:
+        raise Exception("DATABASE_URL no configurada en Railway")
     if url.startswith("postgres://"):
         url = url.replace("postgres://","postgresql://",1)
     return psycopg2.connect(url, cursor_factory=RealDictCursor)
@@ -55,7 +57,8 @@ def create_tecnico(data: TecnicoIn):
         row = dict(cur.fetchone()); conn.commit(); cur.close(); conn.close()
         return row
     except Exception as e:
-        raise HTTPException(500, str(e))
+        print("ERROR crear tecnico:", str(e))
+        raise HTTPException(500, detail=str(e))
 
 @app.delete("/api/tecnicos/{tec_id}")
 def delete_tecnico(tec_id: int):
