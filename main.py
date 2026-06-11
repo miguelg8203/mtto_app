@@ -1511,6 +1511,11 @@ function populateRegEquipos(){
   document.getElementById('eq-dropdown').style.display = 'none';
 }
 
+// Auto-load on page load
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(()=>{ _equiposReg = getEquipos(currentArea); }, 500);
+});
+
 function filtrarEquipos(q){
   const dropdown = document.getElementById('eq-dropdown');
   document.getElementById('reg-equipo').value = '';
