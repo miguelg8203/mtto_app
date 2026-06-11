@@ -1107,6 +1107,7 @@ function renderAlertas(){
       if(alertFilter==='TODOS'||i.estado===alertFilter) items.push({eq:e,iv:i});
     });
   });
+  // No searchQ filter in alertas
   items.sort((a,b)=>a.iv.dias_para_proxima-b.iv.dias_para_proxima);
   const colors={VENCIDO:'',PROXIMO:'yellow',OK:'green'};
   document.getElementById('alert-list').innerHTML=items.map(({eq,iv})=>`
