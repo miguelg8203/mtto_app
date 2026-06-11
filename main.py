@@ -1,21 +1,17 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-from typing import Optional
 import json, os
 
 app = FastAPI()
 
-# ── Simple JSON file storage for tecnicos ────────────────────────────────────
 TECS_FILE = "tecnicos.json"
-
 def load_tecs():
     try:
         if os.path.exists(TECS_FILE):
             with open(TECS_FILE) as f: return json.load(f)
     except: pass
     return []
-
 def save_tecs(data):
     with open(TECS_FILE, 'w') as f: json.dump(data, f)
 
@@ -23,28 +19,19 @@ class TecnicoIn(BaseModel):
     nombre: str
     cargo: str
 
-# ── API endpoints ─────────────────────────────────────────────────────────────
 @app.get("/api/tecnicos")
-def get_tecnicos():
-    return load_tecs()
+def get_tecnicos(): return load_tecs()
 
 @app.post("/api/tecnicos")
 def create_tecnico(data: TecnicoIn):
     tecs = load_tecs()
-    tec = {"id": len(tecs)+1 if not tecs else max(t["id"] for t in tecs)+1,
-           "nombre": data.nombre, "cargo": data.cargo}
-    tecs.append(tec)
-    save_tecs(tecs)
-    return tec
+    tec = {"id": max((t["id"] for t in tecs), default=0)+1, "nombre": data.nombre, "cargo": data.cargo}
+    tecs.append(tec); save_tecs(tecs); return tec
 
 @app.delete("/api/tecnicos/{tec_id}")
 def delete_tecnico(tec_id: int):
-    tecs = load_tecs()
-    tecs = [t for t in tecs if t["id"] != tec_id]
-    save_tecs(tecs)
-    return {"ok": True}
+    save_tecs([t for t in load_tecs() if t["id"] != tec_id]); return {"ok": True}
 
-# ── Frontend ──────────────────────────────────────────────────────────────────
 HTML = """<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -420,10 +407,7 @@ textarea.form-control{resize:vertical;}
       <div class="area-dot" id="topbar-area-dot" style="background:var(--blue)"></div>
       <span id="topbar-area-name">Línea de Beneficio</span>
     </div>
-    <div class="search-box">
-      <span>&#128269;</span>
-      <input type="text" id="search-input" placeholder="Buscar equipo..." oninput="doSearch(this.value)">
-    </div>
+
     <button class="notif-btn" onclick="toggleNotif()" id="notif-btn">
       &#128276;
       <div class="notif-dot" id="notif-dot"></div>
@@ -523,6 +507,10 @@ textarea.form-control{resize:vertical;}
           <option value="OK">OK</option>
         </select>
         <button class="btn-primary" style="margin-left:auto;font-size:12px;padding:5px 14px;" onclick="openEqModal()">+ Nuevo Equipo</button>
+        <div class="search-box" style="width:200px;">
+          <span>&#128269;</span>
+          <input type="text" id="search-input" placeholder="Buscar equipo..." oninput="doSearch(this.value)">
+        </div>
       </div>
       <div class="table-wrap">
         <table>
@@ -1722,5 +1710,4 @@ function closeRegEdit(e){
 """
 
 @app.get("/")
-def root():
-    return HTMLResponse(content=HTML)
+def root(): return HTMLResponse(content=HTML)
