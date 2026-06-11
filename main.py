@@ -969,8 +969,7 @@ let searchQ='', fotosPendientes=[];
   cambiarArea('LB');
   renderAreas();
   document.getElementById('reg-fecha').value='2026-06-06';
-  renderTecLista();
-  populateTecnicoSelect();
+  renderTecLista().then(()=>populateTecnicoSelect());
   checkLogin();
 })();
 
@@ -1494,12 +1493,12 @@ async function agregarTecnico(){
   if(!nombre){alert('Ingresa el nombre del técnico.');return;}
   if(!cargo){alert('Ingresa el cargo del técnico.');return;}
   try{
-    await fetch('/api/tecnicos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,cargo})});
+    const r=await fetch('/api/tecnicos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,cargo})});
+    if(!r.ok) throw new Error('Error al guardar');
     document.getElementById('tec-nombre').value='';
     document.getElementById('tec-cargo').value='';
     await renderTecLista();
     await populateTecnicoSelect();
-    alert('✅ Técnico agregado');
   }catch(e){alert('Error: '+e.message);}
 }
 
@@ -1507,8 +1506,8 @@ async function eliminarTecnico(id){
   if(!confirm('¿Eliminar este técnico?')) return;
   try{
     await fetch('/api/tecnicos/'+id,{method:'DELETE'});
-    renderTecLista();
-    populateTecnicoSelect();
+    await renderTecLista();
+    await populateTecnicoSelect();
   }catch(e){alert('Error: '+e.message);}
 }
 
