@@ -1,8 +1,50 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+from typing import Optional
+import json, os
 
 app = FastAPI()
 
+# ── Simple JSON file storage for tecnicos ────────────────────────────────────
+TECS_FILE = "tecnicos.json"
+
+def load_tecs():
+    try:
+        if os.path.exists(TECS_FILE):
+            with open(TECS_FILE) as f: return json.load(f)
+    except: pass
+    return []
+
+def save_tecs(data):
+    with open(TECS_FILE, 'w') as f: json.dump(data, f)
+
+class TecnicoIn(BaseModel):
+    nombre: str
+    cargo: str
+
+# ── API endpoints ─────────────────────────────────────────────────────────────
+@app.get("/api/tecnicos")
+def get_tecnicos():
+    return load_tecs()
+
+@app.post("/api/tecnicos")
+def create_tecnico(data: TecnicoIn):
+    tecs = load_tecs()
+    tec = {"id": len(tecs)+1 if not tecs else max(t["id"] for t in tecs)+1,
+           "nombre": data.nombre, "cargo": data.cargo}
+    tecs.append(tec)
+    save_tecs(tecs)
+    return tec
+
+@app.delete("/api/tecnicos/{tec_id}")
+def delete_tecnico(tec_id: int):
+    tecs = load_tecs()
+    tecs = [t for t in tecs if t["id"] != tec_id]
+    save_tecs(tecs)
+    return {"ok": True}
+
+# ── Frontend ──────────────────────────────────────────────────────────────────
 HTML = """<!DOCTYPE html>
 <html lang="es">
 <head>
