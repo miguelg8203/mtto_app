@@ -525,11 +525,12 @@ textarea.form-control{resize:vertical;}
           <div class="form-group" style="position:relative;">
             <label>Equipo *</label>
             <input type="text" class="form-control" id="reg-equipo-search" 
-              placeholder="Buscar equipo..." 
+              placeholder="Buscar equipo por nombre o código..." 
               oninput="filtrarEquipos(this.value)"
               autocomplete="off">
             <input type="hidden" id="reg-equipo">
-            <div id="eq-dropdown" style="display:none;position:absolute;z-index:999;background:var(--s1);border:1px solid var(--bd);border-radius:6px;max-height:200px;overflow-y:auto;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.4);"></div>
+            <select id="reg-equipo-hidden" style="display:none;"></select>
+            <div id="eq-dropdown" style="display:none;position:absolute;z-index:999;background:var(--s1);border:1px solid var(--bd);border-radius:6px;max-height:220px;overflow-y:auto;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.5);"></div>
           </div>
         </div>
         <div class="form-row">
@@ -1505,33 +1506,48 @@ let _equiposReg = [];
 function populateRegEquipos(){
   populateTecnicoSelect();
   const aId = document.getElementById('reg-area').value || currentArea;
+  // Fill hidden select (original behavior)
+  const s = document.getElementById('reg-equipo-hidden');
+  s.innerHTML = '<option value="">-- Seleccionar --</option>';
+  getEquipos(aId).forEach(e=>{
+    const o = document.createElement('option');
+    o.value = e.id;
+    o.textContent = e.codigo ? `[${e.codigo}] ${e.descripcion}` : e.descripcion;
+    s.appendChild(o);
+  });
+  // Also fill _equiposReg for search
   _equiposReg = getEquipos(aId);
   document.getElementById('reg-equipo').value = '';
   document.getElementById('reg-equipo-search').value = '';
   document.getElementById('eq-dropdown').style.display = 'none';
 }
 
-// Auto-load on page load
-document.addEventListener('DOMContentLoaded', function(){
-  setTimeout(()=>{ _equiposReg = getEquipos(currentArea); }, 500);
-});
-
 function filtrarEquipos(q){
   const dropdown = document.getElementById('eq-dropdown');
   document.getElementById('reg-equipo').value = '';
   if(!q || q.length < 1){ dropdown.style.display='none'; return; }
   const ql = q.toLowerCase();
-  const matches = _equiposReg.filter(e =>
+  // Use _equiposReg if loaded, else read from hidden select
+  let source = _equiposReg;
+  if(!source || !source.length){
+    const opts = document.getElementById('reg-equipo-hidden').options;
+    source = Array.from(opts).filter(o=>o.value).map(o=>({
+      id: o.value,
+      descripcion: o.textContent.replace(/^\\[.*?\\] /,''),
+      codigo: o.textContent.match(/^\\[(.*?)\\]/)?.[1]||''
+    }));
+  }
+  const matches = source.filter(e =>
     e.descripcion.toLowerCase().includes(ql) ||
     (e.codigo||'').toLowerCase().includes(ql)
   ).slice(0, 15);
   if(!matches.length){ dropdown.style.display='none'; return; }
   dropdown.innerHTML = matches.map(e => `
-    <div onclick="seleccionarEquipo(${e.id},'${e.descripcion.replace(/'/g,"\\'")}','${(e.codigo||'').replace(/'/g,"\\'")}') "
-      style="padding:8px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--bd);transition:background .1s;"
+    <div onclick="seleccionarEquipo(${e.id},'${e.descripcion.replace(/'/g,"\\'")}','${(e.codigo||'').replace(/'/g,"\\'")}');"
+      style="padding:8px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--bd);"
       onmouseover="this.style.background='var(--s2)'" onmouseout="this.style.background=''">
       <span style="color:var(--tb);font-weight:600;">${e.descripcion.substring(0,55)}</span>
-      ${e.codigo ? `<span style="font-size:10px;color:var(--td);margin-left:6px;font-family:var(--mono);">${e.codigo}</span>` : ''}
+      ${e.codigo?`<span style="font-size:10px;color:var(--td);margin-left:6px;font-family:var(--mono);">${e.codigo}</span>`:''}
     </div>`).join('');
   dropdown.style.display = 'block';
 }
