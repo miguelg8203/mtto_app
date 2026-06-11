@@ -527,6 +527,7 @@ textarea.form-control{resize:vertical;}
             <input type="text" class="form-control" id="reg-equipo-search" 
               placeholder="Buscar equipo por nombre o código..." 
               oninput="filtrarEquipos(this.value)"
+              onfocus="cargarEquiposReg()"
               autocomplete="off">
             <input type="hidden" id="reg-equipo">
             <select id="reg-equipo-hidden" style="display:none;"></select>
@@ -1190,6 +1191,21 @@ function openFotoModal(src){ document.getElementById('foto-modal-img').src=src; 
 function closeFotoModal(e){ if(!e||e.target===document.getElementById('foto-modal-overlay')) document.getElementById('foto-modal-overlay').classList.remove('on'); }
 function irRegistrar(areaId,eqId){ closeModal(); document.getElementById('reg-area').value=areaId; populateRegEquipos(); setTimeout(()=>document.getElementById('reg-equipo').value=eqId,80); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on')); goPage('registro',document.querySelectorAll('.nav-item')[4]); }
 
+function cargarEquiposReg(){
+  const aId = document.getElementById('reg-area').value || currentArea;
+  const s = document.getElementById('reg-equipo-hidden');
+  if(s.options.length <= 1){
+    s.innerHTML = '<option value="">--</option>';
+    getEquipos(aId).forEach(e=>{
+      const o = document.createElement('option');
+      o.value = e.id;
+      o.textContent = (e.codigo?'['+e.codigo+'] ':'')+e.descripcion;
+      s.appendChild(o);
+    });
+  }
+  _equiposReg = getEquipos(aId);
+}
+
 function populateRegEquipos(){
   populateTecnicoSelect();
   const aId=document.getElementById('reg-area').value||currentArea;
@@ -1502,6 +1518,21 @@ function checkLogin(){
 
 // ── BUSCADOR DE EQUIPOS ───────────────────────────────
 let _equiposReg = [];
+
+function cargarEquiposReg(){
+  const aId = document.getElementById('reg-area').value || currentArea;
+  const s = document.getElementById('reg-equipo-hidden');
+  if(s.options.length <= 1){
+    s.innerHTML = '<option value="">--</option>';
+    getEquipos(aId).forEach(e=>{
+      const o = document.createElement('option');
+      o.value = e.id;
+      o.textContent = (e.codigo?'['+e.codigo+'] ':'')+e.descripcion;
+      s.appendChild(o);
+    });
+  }
+  _equiposReg = getEquipos(aId);
+}
 
 function populateRegEquipos(){
   populateTecnicoSelect();
