@@ -1193,17 +1193,10 @@ function irRegistrar(areaId,eqId){ closeModal(); document.getElementById('reg-ar
 
 function cargarEquiposReg(){
   const aId = document.getElementById('reg-area').value || currentArea;
-  const s = document.getElementById('reg-equipo-hidden');
-  if(s.options.length <= 1){
-    s.innerHTML = '<option value="">--</option>';
-    getEquipos(aId).forEach(e=>{
-      const o = document.createElement('option');
-      o.value = e.id;
-      o.textContent = (e.codigo?'['+e.codigo+'] ':'')+e.descripcion;
-      s.appendChild(o);
-    });
-  }
   _equiposReg = getEquipos(aId);
+  // Mostrar todos al hacer foco si el campo está vacío
+  const q = document.getElementById('reg-equipo-search').value;
+  if(!q) filtrarEquipos('');
 }
 
 function populateRegEquipos(){
@@ -1521,17 +1514,10 @@ let _equiposReg = [];
 
 function cargarEquiposReg(){
   const aId = document.getElementById('reg-area').value || currentArea;
-  const s = document.getElementById('reg-equipo-hidden');
-  if(s.options.length <= 1){
-    s.innerHTML = '<option value="">--</option>';
-    getEquipos(aId).forEach(e=>{
-      const o = document.createElement('option');
-      o.value = e.id;
-      o.textContent = (e.codigo?'['+e.codigo+'] ':'')+e.descripcion;
-      s.appendChild(o);
-    });
-  }
   _equiposReg = getEquipos(aId);
+  // Mostrar todos al hacer foco si el campo está vacío
+  const q = document.getElementById('reg-equipo-search').value;
+  if(!q) filtrarEquipos('');
 }
 
 function populateRegEquipos(){
@@ -1555,8 +1541,14 @@ function populateRegEquipos(){
 
 function filtrarEquipos(q){
   const dropdown = document.getElementById('eq-dropdown');
-  document.getElementById('reg-equipo').value = '';
-  if(!q || q.length < 1){ dropdown.style.display='none'; return; }
+  if(q) document.getElementById('reg-equipo').value = '';
+  // Load equipos if not loaded yet
+  if(!_equiposReg || !_equiposReg.length){
+    const aId = document.getElementById('reg-area').value || currentArea;
+    _equiposReg = getEquipos(aId);
+  }
+  if(!_equiposReg || !_equiposReg.length){ dropdown.style.display='none'; return; }
+  if(q !== undefined && q.length < 1){ dropdown.style.display='none'; return; }
   const ql = q.toLowerCase();
   // Use _equiposReg if loaded, else read from hidden select
   let source = _equiposReg;
@@ -1568,7 +1560,8 @@ function filtrarEquipos(q){
       codigo: o.textContent.match(/^\\[(.*?)\\]/)?.[1]||''
     }));
   }
-  const matches = source.filter(e =>
+  const source2 = _equiposReg.length ? _equiposReg : source;
+  const matches = !ql ? source2.slice(0,15) : source2.filter(e =>
     e.descripcion.toLowerCase().includes(ql) ||
     (e.codigo||'').toLowerCase().includes(ql)
   ).slice(0, 15);
