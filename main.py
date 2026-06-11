@@ -1458,12 +1458,13 @@ function importarDatos(input){ const f=input.files[0]; if(!f) return; const r=ne
 // ═══════════════════════════════════════════════════════
 // TÉCNICOS
 // ═══════════════════════════════════════════════════════
-function getTecnicos(){
-  return ls('mtto_tecnicos') || [];
+async function getTecnicos(){
+  try{ const r=await fetch('/api/tecnicos'); return await r.json(); }
+  catch(e){ return ls('mtto_tecnicos')||[]; }
 }
 
-function renderTecLista(){
-  const tecs = getTecnicos();
+async function renderTecLista(){
+  const tecs = await getTecnicos();
   if(!tecs.length){
     document.getElementById('tec-lista').innerHTML = '<div style="font-size:12px;color:var(--td);padding:8px 0;">Sin técnicos registrados.</div>';
     return;
@@ -1487,36 +1488,35 @@ function renderTecLista(){
     </table>`;
 }
 
-function agregarTecnico(){
-  const nombre = document.getElementById('tec-nombre').value.trim();
-  const cargo  = document.getElementById('tec-cargo').value.trim();
-  if(!nombre){ alert('Ingresa el nombre del técnico.'); return; }
-  if(!cargo){ alert('Ingresa el cargo del técnico.'); return; }
-  const tecs = getTecnicos();
-  if(tecs.find(t=>t.nombre.toLowerCase()===nombre.toLowerCase())){
-    alert('Ya existe un técnico con ese nombre.'); return;
-  }
-  tecs.push({ id: Date.now(), nombre, cargo });
-  lsSet('mtto_tecnicos', tecs);
-  document.getElementById('tec-nombre').value = '';
-  document.getElementById('tec-cargo').value = '';
-  renderTecLista();
-  populateTecnicoSelect();
-  alert('✅ Técnico agregado');
+async function agregarTecnico(){
+  const nombre=document.getElementById('tec-nombre').value.trim();
+  const cargo=document.getElementById('tec-cargo').value.trim();
+  if(!nombre){alert('Ingresa el nombre del técnico.');return;}
+  if(!cargo){alert('Ingresa el cargo del técnico.');return;}
+  try{
+    await fetch('/api/tecnicos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,cargo})});
+    document.getElementById('tec-nombre').value='';
+    document.getElementById('tec-cargo').value='';
+    await renderTecLista();
+    await populateTecnicoSelect();
+    alert('✅ Técnico agregado');
+  }catch(e){alert('Error: '+e.message);}
 }
 
-function eliminarTecnico(id){
+async function eliminarTecnico(id){
   if(!confirm('¿Eliminar este técnico?')) return;
-  lsSet('mtto_tecnicos', getTecnicos().filter(t=>t.id!==id));
-  renderTecLista();
-  populateTecnicoSelect();
+  try{
+    await fetch('/api/tecnicos/'+id,{method:'DELETE'});
+    renderTecLista();
+    populateTecnicoSelect();
+  }catch(e){alert('Error: '+e.message);}
 }
 
-function populateTecnicoSelect(){
+async function populateTecnicoSelect(){
   const sel = document.getElementById('reg-tecnico');
   if(!sel) return;
   const current = sel.value;
-  const tecs = getTecnicos();
+  const tecs = await getTecnicos();
   sel.innerHTML = '<option value="">-- Seleccionar técnico --</option>';
   tecs.forEach(t=>{
     const op = document.createElement('option');
