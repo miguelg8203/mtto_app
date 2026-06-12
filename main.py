@@ -209,6 +209,20 @@ def delete_equipo(eq_id: int):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@app.get("/api/debug/seed")
+def debug_seed():
+    init_db()
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) as c FROM equipos")
+        c1 = cur.fetchone()["c"]
+        cur.execute("SELECT COUNT(*) as c FROM equipos WHERE area_id='LB'")
+        c2 = cur.fetchone()["c"]
+        cur.close(); conn.close()
+        return {"total_equipos": c1, "lb_equipos": c2}
+    except Exception as e:
+        return {"error": str(e)}
+
 HTML = """<!DOCTYPE html>
 <html lang="es">
 <head>
