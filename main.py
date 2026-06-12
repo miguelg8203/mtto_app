@@ -28,6 +28,19 @@ def init_db():
                 cargo TEXT NOT NULL
             )
         """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS registros (
+                id BIGINT PRIMARY KEY,
+                equipo_id BIGINT NOT NULL,
+                area_id TEXT NOT NULL,
+                equipo_nombre TEXT,
+                frecuencia TEXT,
+                fecha TEXT,
+                tecnico TEXT,
+                obs TEXT,
+                fotos JSONB DEFAULT '[]'
+            )
+        """)
         conn.commit(); cur.close(); conn.close()
     except Exception as e:
         print("DB init error:", e)
@@ -65,6 +78,56 @@ def delete_tecnico(tec_id: int):
     try:
         conn = get_conn(); cur = conn.cursor()
         cur.execute("DELETE FROM tecnicos WHERE id=%s", (tec_id,))
+        conn.commit(); cur.close(); conn.close()
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+
+class RegistroIn(BaseModel):
+    id: int
+    equipo_id: int
+    area_id: str
+    equipo_nombre: str = ""
+    frecuencia: str
+    fecha: str
+    tecnico: str = ""
+    obs: str = ""
+    fotos: list = []
+
+@app.get("/api/registros")
+def get_registros():
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("SELECT * FROM registros ORDER BY id DESC")
+        rows = cur.fetchall(); cur.close(); conn.close()
+        return [dict(r) for r in rows]
+    except Exception:
+        return []
+
+@app.post("/api/registros")
+def create_registro(data: RegistroIn):
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("""INSERT INTO registros (id,equipo_id,area_id,equipo_nombre,frecuencia,fecha,tecnico,obs,fotos)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                       ON CONFLICT (id) DO UPDATE SET
+                         equipo_id=EXCLUDED.equipo_id, area_id=EXCLUDED.area_id, equipo_nombre=EXCLUDED.equipo_nombre,
+                         frecuencia=EXCLUDED.frecuencia, fecha=EXCLUDED.fecha, tecnico=EXCLUDED.tecnico,
+                         obs=EXCLUDED.obs, fotos=EXCLUDED.fotos
+                       RETURNING *""",
+                    (data.id, data.equipo_id, data.area_id, data.equipo_nombre, data.frecuencia,
+                     data.fecha, data.tecnico, data.obs, json.dumps(data.fotos)))
+        row = dict(cur.fetchone()); conn.commit(); cur.close(); conn.close()
+        return row
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@app.delete("/api/registros/{reg_id}")
+def delete_registro(reg_id: int):
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("DELETE FROM registros WHERE id=%s", (reg_id,))
         conn.commit(); cur.close(); conn.close()
         return {"ok": True}
     except Exception as e:
@@ -1019,7 +1082,12 @@ function deleteEquipo(areaId,eqId){
   }
 }
 
-function getRegistros(){ return ls('mtto_registros')||[]; }
+let _registrosCache = null;
+async function getRegistros(){
+  try{ const r=await fetch('/api/registros'); const d=await r.json(); _registrosCache=Array.isArray(d)?d:[]; return _registrosCache; }
+  catch(e){ return ls('mtto_registros')||[]; }
+}
+function getRegistrosSync(){ return _registrosCache || ls('mtto_registros') || []; }
 function getConfig(){ return ls('mtto_config')||{empresa:'Planta de Beneficio',year:'2026',pass:''}; }
 
 let currentArea='LB', DATA=[], eqFilter='TODOS', alertFilter='VENCIDO';
@@ -1040,6 +1108,7 @@ let searchQ='', fotosPendientes=[];
   renderAreas();
   document.getElementById('reg-fecha').value=TODAY.toISOString().split('T')[0];
   renderTecLista().then(()=>populateTecnicoSelect());
+  getRegistros().then(()=>{ renderRegistros(); renderGraficas; });
   checkLogin();
 })();
 
@@ -1292,7 +1361,7 @@ function showModal_area(areaId,eqId){
       html+=`<div class="interv-row"><div class="interv-freq">${iv.frecuencia}</div><div class="interv-info"><div class="interv-fecha">Última: <b>${fmtDate(iv.ultima_fecha)}</b></div><div class="interv-prox">Próxima: ${fmtDate(iv.proxima_fecha)} · Ciclo: ${iv.dias_ciclo}d</div>${iv.tarea?`<div style="font-size:11px;color:var(--blue);margin-top:3px;">📋 ${iv.tarea}</div>`:''}</div><span class="status-badge ${stC}" style="margin-right:8px;">${iv.estado}</span><div class="interv-days ${dC}">${iv.dias_para_proxima<0?'-'+Math.abs(iv.dias_para_proxima):'+'+iv.dias_para_proxima}d</div></div>`;
     });
   }
-  const regs=getRegistros().filter(r=>r.equipo_id==eqId&&r.area_id===areaId);
+  const regs=getRegistrosSync().filter(r=>r.equipo_id==eqId&&r.area_id===areaId);
   if(regs.length){
     html+=`<div style="font-size:12px;font-weight:600;color:var(--td);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.5px;">Historial (${regs.length})</div>`;
     html+=regs.slice(-3).reverse().map(r=>`<div style="background:var(--s3);border-radius:6px;padding:10px 12px;margin-bottom:6px;font-size:12px;">
@@ -1335,26 +1404,29 @@ function handleFotos(input){
 }
 function renderFotoPreview(){ document.getElementById('foto-preview').innerHTML=fotosPendientes.map((f,i)=>`<div class="foto-thumb"><img src="${f}" onclick="openFotoModal('${f}')"><button class="foto-del" onclick="removeFoto(${i})">✕</button></div>`).join(''); }
 function removeFoto(i){ fotosPendientes.splice(i,1); renderFotoPreview(); }
-function guardarRegistro(){
+async function guardarRegistro(){
   const aId=document.getElementById('reg-area').value||currentArea;
   const eqId=document.getElementById('reg-equipo').value, freq=document.getElementById('reg-freq').value, fecha=document.getElementById('reg-fecha').value;
   if(!eqId||!freq||!fecha){ alert('Completa los campos requeridos (*)'); return; }
   const eq=getEquipos(aId).find(e=>e.id==eqId);
-  const regs=getRegistros();
-  regs.push({id:Date.now(),equipo_id:parseInt(eqId),area_id:aId,equipo_nombre:eq?eq.descripcion.substring(0,60):'',frecuencia:freq,fecha,tecnico:document.getElementById('reg-tecnico').value,obs:document.getElementById('reg-obs').value,fotos:[...fotosPendientes],registrado:new Date().toISOString()});
-  lsSet('mtto_registros',regs);
+  const nuevo={id:Date.now(),equipo_id:parseInt(eqId),area_id:aId,equipo_nombre:eq?eq.descripcion.substring(0,60):'',frecuencia:freq,fecha,tecnico:document.getElementById('reg-tecnico').value,obs:document.getElementById('reg-obs').value,fotos:[...fotosPendientes]};
+  try{
+    await fetch('/api/registros',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(nuevo)});
+  }catch(e){ alert('Error al guardar registro: '+e.message); return; }
   if(eq){
     const intervs=(eq.intervenciones||[]).map(iv=>iv.frecuencia===freq?{...iv,ultima_fecha:fecha}:iv);
     if(!intervs.find(iv=>iv.frecuencia===freq)) intervs.push({frecuencia:freq,dias_ciclo:FREQ_DIAS[freq],ultima_fecha:fecha});
     saveEquipo(aId,{...eq,intervenciones:intervs});
     cambiarArea(currentArea);
   }
-  fotosPendientes=[]; renderFotoPreview(); limpiarForm(); renderRegistros();
+  fotosPendientes=[]; renderFotoPreview(); limpiarForm();
+  await renderRegistros();
   alert('✅ Registro guardado');
 }
 function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-fecha').value=TODAY.toISOString().split('T')[0]; fotosPendientes=[]; renderFotoPreview(); }
-function renderRegistros(){
-  document.getElementById('reg-tbody').innerHTML=getRegistros().slice().reverse().map(r=>`<tr>
+async function renderRegistros(){
+  const regs = await getRegistros();
+  document.getElementById('reg-tbody').innerHTML=regs.slice().reverse().map(r=>`<tr>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${fmtDate(r.fecha)}</td>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${r.equipo_nombre||'--'}</td>
     <td style="padding:8px 14px;border-top:1px solid var(--bd);"><span class="freq-tag">${r.frecuencia}</span></td>
@@ -1457,7 +1529,7 @@ function renderGraficas(){
     const col={ALTO:'var(--red)',MEDIO:'var(--yellow)',BAJO:'var(--green)'}[c];
     return `<div class="cumpl-row"><div class="cumpl-label">${c}</div><div class="cumpl-track"><div class="cumpl-fill" style="width:${pct}%;background:${col};"><span>${pct}%</span></div></div><span style="font-size:11px;color:var(--td);width:50px;">${ok}/${tot}</span></div>`;
   }).join('');
-  const regs=getRegistros(); const cntM=new Array(12).fill(0);
+  const regs=getRegistrosSync(); const cntM=new Array(12).fill(0);
   regs.forEach(r=>{ if(r.fecha) cntM[new Date(r.fecha+'T00:00:00').getMonth()]++; });
   const maxM=Math.max(...cntM,1);
   document.getElementById('chart-meses').innerHTML=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'].map((m,i)=>`<div class="bar-row"><div class="bar-label">${m}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(cntM[i]/maxM*100)}%;background:var(--blue);"><span>${cntM[i]}</span></div></div></div>`).join('');
@@ -1519,7 +1591,7 @@ function guardarConfig(){ const cfg=getConfig(); cfg.empresa=document.getElement
 function cambiarPassword(){ const cfg=getConfig(), actual=document.getElementById('cfg-pass-actual').value, nueva=document.getElementById('cfg-pass-nueva').value, conf=document.getElementById('cfg-pass-confirm').value; if(cfg.pass&&actual!==cfg.pass){alert('Contraseña actual incorrecta');return;} if(!nueva||nueva.length<4){alert('Mínimo 4 caracteres');return;} if(nueva!==conf){alert('Las contraseñas no coinciden');return;} cfg.pass=nueva; lsSet('mtto_config',cfg); ['cfg-pass-actual','cfg-pass-nueva','cfg-pass-confirm'].forEach(id=>document.getElementById(id).value=''); alert('✅ Contraseña actualizada'); }
 
 function exportarDatos(){
-  const bk={version:2,fecha:new Date().toISOString(),areas:getAreas(),registros:getRegistros(),config:getConfig(),tecnicos:getTecnicos(),equipos_custom:{},deleted_LB:ls('mtto_deleted_LB')||[]};
+  const bk={version:2,fecha:new Date().toISOString(),areas:getAreas(),registros:getRegistrosSync(),config:getConfig(),tecnicos:getTecnicos(),equipos_custom:{},deleted_LB:ls('mtto_deleted_LB')||[]};
   getAreas().forEach(a=>{ const c=ls('mtto_equipos_'+a.id); if(c) bk.equipos_custom[a.id]=c; });
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(bk,null,2)],{type:'application/json'})); a.download='mtto_backup_'+new Date().toISOString().split('T')[0]+'.json'; a.click();
 }
@@ -1697,7 +1769,7 @@ document.addEventListener('click', function(e){
 
 // ── EDITAR REGISTRO ───────────────────────────────────
 function editarRegistro(id){
-  const regs = getRegistros();
+  const regs = getRegistrosSync();
   const r = regs.find(x=>x.id===id);
   if(!r){ alert('Registro no encontrado'); return; }
   document.getElementById('reg-edit-id').value = id;
@@ -1708,18 +1780,20 @@ function editarRegistro(id){
   document.getElementById('reg-edit-overlay').classList.add('on');
 }
 
-function guardarEditReg(){
+async function guardarEditReg(){
   const id = parseInt(document.getElementById('reg-edit-id').value);
-  const regs = getRegistros();
+  const regs = getRegistrosSync();
   const idx = regs.findIndex(x=>x.id===id);
   if(idx<0) return;
-  regs[idx].fecha      = document.getElementById('reg-edit-fecha').value;
-  regs[idx].frecuencia = document.getElementById('reg-edit-freq').value;
-  regs[idx].tecnico    = document.getElementById('reg-edit-tecnico').value;
-  regs[idx].obs        = document.getElementById('reg-edit-obs').value;
-  lsSet('mtto_registros', regs);
+  const r = {...regs[idx]};
+  r.fecha      = document.getElementById('reg-edit-fecha').value;
+  r.frecuencia = document.getElementById('reg-edit-freq').value;
+  r.tecnico    = document.getElementById('reg-edit-tecnico').value;
+  r.obs        = document.getElementById('reg-edit-obs').value;
+  try{
+    await fetch('/api/registros',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(r)});
+  }catch(e){ alert('Error: '+e.message); return; }
   // Update equipo ultima_fecha
-  const r = regs[idx];
   const eq = getEquipos(r.area_id).find(e=>e.id==r.equipo_id);
   if(eq){
     const intervs=(eq.intervenciones||[]).map(iv=>iv.frecuencia===r.frecuencia?{...iv,ultima_fecha:r.fecha}:iv);
@@ -1727,16 +1801,17 @@ function guardarEditReg(){
     cambiarArea(currentArea);
   }
   closeRegEdit();
-  renderRegistros();
+  await renderRegistros();
   alert('✅ Registro actualizado');
 }
 
-function eliminarRegistro(){
+async function eliminarRegistro(){
   const id = parseInt(document.getElementById('reg-edit-id').value);
   if(!confirm('¿Eliminar este registro?')) return;
-  lsSet('mtto_registros', getRegistros().filter(x=>x.id!==id));
+  try{ await fetch('/api/registros/'+id,{method:'DELETE'}); }
+  catch(e){ alert('Error: '+e.message); return; }
   closeRegEdit();
-  renderRegistros();
+  await renderRegistros();
   cambiarArea(currentArea);
 }
 
