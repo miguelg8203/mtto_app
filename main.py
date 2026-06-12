@@ -1024,7 +1024,7 @@ function getConfig(){ return ls('mtto_config')||{empresa:'Planta de Beneficio',y
 
 let currentArea='LB', DATA=[], eqFilter='TODOS', alertFilter='VENCIDO';
 let eqPage=1; const PER_PAGE=20;
-let calYear=2026, calMonth=6;
+let calYear=TODAY.getFullYear(), calMonth=TODAY.getMonth()+1;
 let calFilters={VENCIDO:true,PROXIMO:true,OK:true};
 let searchQ='', fotosPendientes=[];
 
@@ -1258,7 +1258,7 @@ function renderCalendar(){
   document.getElementById('cal-grid').innerHTML=cells.map(c=>{
     const ev=!c.other&&events[c.day]; let evH='';
     if(ev){ if(ev.VENCIDO.length) evH+=`<div class="cal-event ce-red">🔴 ${ev.VENCIDO.length}</div>`; if(ev.PROXIMO.length) evH+=`<div class="cal-event ce-yellow">⚠ ${ev.PROXIMO.length}</div>`; if(ev.OK.length) evH+=`<div class="cal-event ce-green">✅ ${ev.OK.length}</div>`; }
-    const isToday=c.day===6&&calMonth===6&&calYear===2026&&!c.other;
+    const isToday=c.day===TODAY.getDate()&&calMonth===(TODAY.getMonth()+1)&&calYear===TODAY.getFullYear()&&!c.other;
     return `<div class="cal-day ${c.other?'other-month':''} ${isToday?'today':''}" onclick="${!c.other?`showCalDay(${c.day},${calMonth},${calYear})`:''}"><div class="cal-day-num">${c.day}</div>${evH}</div>`;
   }).join('');
   document.getElementById('cal-day-detail').innerHTML='';
