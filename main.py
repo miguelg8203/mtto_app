@@ -1038,7 +1038,7 @@ let searchQ='', fotosPendientes=[];
   buildAreaSelectors();
   cambiarArea('LB');
   renderAreas();
-  document.getElementById('reg-fecha').value='2026-06-06';
+  document.getElementById('reg-fecha').value=TODAY.toISOString().split('T')[0];
   renderTecLista().then(()=>populateTecnicoSelect());
   checkLogin();
 })();
@@ -1352,7 +1352,7 @@ function guardarRegistro(){
   fotosPendientes=[]; renderFotoPreview(); limpiarForm(); renderRegistros();
   alert('✅ Registro guardado');
 }
-function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-fecha').value='2026-06-06'; fotosPendientes=[]; renderFotoPreview(); }
+function limpiarForm(){ ['reg-equipo','reg-freq','reg-obs'].forEach(id=>document.getElementById(id).value=''); document.getElementById('reg-tecnico').value=''; document.getElementById('reg-fecha').value=TODAY.toISOString().split('T')[0]; fotosPendientes=[]; renderFotoPreview(); }
 function renderRegistros(){
   document.getElementById('reg-tbody').innerHTML=getRegistros().slice().reverse().map(r=>`<tr>
     <td style="font-size:11px;padding:8px 14px;border-top:1px solid var(--bd);">${fmtDate(r.fecha)}</td>
