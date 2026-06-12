@@ -342,7 +342,8 @@ textarea.form-control{resize:vertical;}
 /* EQUIPO CRUD MODAL */
 .eq-form-section{margin-bottom:16px;}
 .freq-list{display:flex;flex-direction:column;gap:8px;}
-.freq-item{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;display:flex;gap:10px;align-items:flex-end;}
+.freq-item{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+.freq-item .freq-tarea-wrap{flex-basis:100%;}
 .freq-item .form-group{flex:1;}
 .add-freq-btn{background:transparent;border:1px dashed var(--bd);color:var(--td);border-radius:6px;padding:8px;width:100%;cursor:pointer;font-family:var(--f);font-size:12px;transition:all .15s;margin-top:6px;}
 .add-freq-btn:hover{border-color:var(--blue);color:var(--blue);}
@@ -601,7 +602,7 @@ textarea.form-control{resize:vertical;}
         <div class="form-row">
           <div class="form-group">
             <label>Frecuencia *</label>
-            <select class="form-control" id="reg-freq">
+            <select class="form-control" id="reg-freq" onchange="mostrarTareaFreq()">
               <option value="">-- Seleccionar --</option>
               <option value="MENSUAL">Mensual (30 días)</option>
               <option value="BIMENSUAL">Bimensual (60 días)</option>
@@ -611,6 +612,7 @@ textarea.form-control{resize:vertical;}
               <option value="ANUAL">Anual (365 días)</option>
               <option value="BIANUAL">Bianual (730 días)</option>
             </select>
+            <div id="reg-tarea-hint" style="font-size:11px;color:var(--blue);margin-top:4px;display:none;"></div>
           </div>
           <div class="form-group">
             <label>Fecha de Intervención *</label>
@@ -1287,7 +1289,7 @@ function showModal_area(areaId,eqId){
     eqR.intervenciones.forEach(iv=>{
       const stC={VENCIDO:'st-vencido',PROXIMO:'st-proximo',OK:'st-ok',SIN:'st-sin'}[iv.estado];
       const dC=iv.dias_para_proxima<0?'dias-red':iv.dias_para_proxima<=30?'dias-yellow':'dias-green';
-      html+=`<div class="interv-row"><div class="interv-freq">${iv.frecuencia}</div><div class="interv-info"><div class="interv-fecha">Última: <b>${fmtDate(iv.ultima_fecha)}</b></div><div class="interv-prox">Próxima: ${fmtDate(iv.proxima_fecha)} · Ciclo: ${iv.dias_ciclo}d</div></div><span class="status-badge ${stC}" style="margin-right:8px;">${iv.estado}</span><div class="interv-days ${dC}">${iv.dias_para_proxima<0?'-'+Math.abs(iv.dias_para_proxima):'+'+iv.dias_para_proxima}d</div></div>`;
+      html+=`<div class="interv-row"><div class="interv-freq">${iv.frecuencia}</div><div class="interv-info"><div class="interv-fecha">Última: <b>${fmtDate(iv.ultima_fecha)}</b></div><div class="interv-prox">Próxima: ${fmtDate(iv.proxima_fecha)} · Ciclo: ${iv.dias_ciclo}d</div>${iv.tarea?`<div style="font-size:11px;color:var(--blue);margin-top:3px;">📋 ${iv.tarea}</div>`:''}</div><span class="status-badge ${stC}" style="margin-right:8px;">${iv.estado}</span><div class="interv-days ${dC}">${iv.dias_para_proxima<0?'-'+Math.abs(iv.dias_para_proxima):'+'+iv.dias_para_proxima}d</div></div>`;
     });
   }
   const regs=getRegistros().filter(r=>r.equipo_id==eqId&&r.area_id===areaId);
@@ -1379,16 +1381,17 @@ function openEqModal(eqId){
     document.getElementById('eq-cat').value=eq.categoria;
     document.getElementById('eq-edit-id').value=eqId;
     document.getElementById('eq-delete-btn').style.display='';
-    (eq.intervenciones||[]).forEach(iv=>addFreqRow(iv.frecuencia,iv.ultima_fecha));
+    (eq.intervenciones||[]).forEach(iv=>addFreqRow(iv.frecuencia,iv.ultima_fecha,iv.tarea||''));
   } else { document.getElementById('eq-desc').value=''; document.getElementById('eq-codigo').value=''; document.getElementById('eq-cat').value='ALTO'; addFreqRow(); }
   document.getElementById('eq-modal-overlay').classList.add('on');
 }
-function addFreqRow(freq='',fecha=''){
+function addFreqRow(freq='',fecha='',tarea=''){
   const wrap=document.getElementById('eq-freq-list'), div=document.createElement('div');
   div.className='freq-item';
   div.innerHTML=`<div class="form-group"><label>Frecuencia</label><select class="form-control freq-sel">${['MENSUAL','BIMENSUAL','TRIMESTRAL','CUATRIMESTRAL','SEMESTRAL','ANUAL','BIANUAL'].map(f=>`<option value="${f}" ${f===freq?'selected':''}>${f}</option>`).join('')}</select></div>
   <div class="form-group"><label>Última intervención</label><input type="date" class="form-control freq-fecha" value="${fecha||''}"></div>
-  <button type="button" style="background:transparent;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:0 4px;margin-bottom:2px;" onclick="this.parentElement.remove()">✕</button>`;
+  <button type="button" style="background:transparent;border:none;color:var(--red);cursor:pointer;font-size:18px;padding:0 4px;margin-bottom:2px;" onclick="this.parentElement.remove()">✕</button>
+  <div class="form-group freq-tarea-wrap"><label>Tarea a realizar</label><input type="text" class="form-control freq-tarea" placeholder="Ej: Lubricación de rodamientos, cambio de filtros..." value="${tarea||''}"></div>`;
   wrap.appendChild(div);
 }
 function guardarEquipo(){
@@ -1396,7 +1399,7 @@ function guardarEquipo(){
   const cat=document.getElementById('eq-cat').value, aId=document.getElementById('eq-area-sel').value;
   const editId=document.getElementById('eq-edit-id').value;
   if(!desc){ alert('La descripción es requerida'); return; }
-  const intervenciones=[...document.querySelectorAll('#eq-freq-list .freq-item')].map(row=>({ frecuencia:row.querySelector('.freq-sel').value, dias_ciclo:FREQ_DIAS[row.querySelector('.freq-sel').value]||30, ultima_fecha:row.querySelector('.freq-fecha').value||null })).filter(iv=>iv.frecuencia);
+  const intervenciones=[...document.querySelectorAll('#eq-freq-list .freq-item')].map(row=>({ frecuencia:row.querySelector('.freq-sel').value, dias_ciclo:FREQ_DIAS[row.querySelector('.freq-sel').value]||30, ultima_fecha:row.querySelector('.freq-fecha').value||null, tarea:row.querySelector('.freq-tarea').value||'' })).filter(iv=>iv.frecuencia);
   const eq={id:editId?parseInt(editId):Date.now(),categoria:cat,descripcion:desc,codigo,intervenciones};
   saveEquipo(aId,eq); cambiarArea(currentArea); closeEqModal(); alert('✅ Equipo guardado');
 }
@@ -1740,6 +1743,20 @@ function eliminarRegistro(){
 function closeRegEdit(e){
   if(!e||e.target===document.getElementById('reg-edit-overlay'))
     document.getElementById('reg-edit-overlay').classList.remove('on');
+}
+
+// ── MOSTRAR TAREA AL SELECCIONAR FRECUENCIA ───────────────────
+function mostrarTareaFreq(){
+  const eqId = document.getElementById('reg-equipo').value;
+  const freq  = document.getElementById('reg-freq').value;
+  const hint  = document.getElementById('reg-tarea-hint');
+  if(!eqId||!freq){ hint.style.display='none'; return; }
+  const aId = document.getElementById('reg-area').value||currentArea;
+  const eq  = getEquipos(aId).find(e=>e.id==eqId);
+  if(!eq){ hint.style.display='none'; return; }
+  const iv = (eq.intervenciones||[]).find(i=>i.frecuencia===freq);
+  if(iv&&iv.tarea){ hint.textContent='📋 '+iv.tarea; hint.style.display='block'; }
+  else { hint.style.display='none'; }
 }
 
 </script>
