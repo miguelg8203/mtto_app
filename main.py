@@ -1201,7 +1201,7 @@ let searchQ='', fotosPendientes=[];
   await renderAreas();
   document.getElementById('reg-fecha').value=TODAY.toISOString().split('T')[0];
   renderTecLista().then(()=>populateTecnicoSelect());
-  getRegistros().then(()=>{ renderRegistros(); renderGraficas; });
+  getRegistros().then(()=>{ renderRegistros(); });
   checkLogin();
 })();
 
@@ -1604,6 +1604,40 @@ async function guardarArea(){
 
 async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }
 
+async function renderGraficas(){
+  const filtArea=document.getElementById('graf-area').value, areas=getAreas();
+  for(const a of areas){ if(!_equiposCache[a.id]) await fetchEquipos(a.id); }
+  const aStats=areas.map(a=>{ const eqs=getEquipos(a.id); let v=0,p=0,ok=0; eqs.forEach(e=>calcIntervenciones(e.intervenciones).forEach(i=>{ if(i.estado==='VENCIDO')v++;else if(i.estado==='PROXIMO')p++;else if(i.estado==='OK')ok++; })); return {a,v,p,ok,tot:v+p+ok}; });
+  document.getElementById('chart-areas').innerHTML=aStats.map(s=>{
+    const pV=s.tot>0?Math.round(s.v/s.tot*100):0, pP=s.tot>0?Math.round(s.p/s.tot*100):0, pOk=s.tot>0?Math.round(s.ok/s.tot*100):0;
+    return `<div class="bar-row" style="margin-bottom:8px;"><div class="bar-label" style="width:120px;font-size:10px;">${s.a.icono} ${s.a.nombre.substring(0,14)}</div>
+      <div style="flex:1;"><div style="display:flex;height:20px;border-radius:4px;overflow:hidden;background:var(--s3);">
+        ${s.v>0?`<div style="width:${pV}%;background:var(--red);display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:#fff;font-weight:700;">${s.v}</span></div>`:''}
+        ${s.p>0?`<div style="width:${pP}%;background:var(--yellow);display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:#000;font-weight:700;">${s.p}</span></div>`:''}
+        ${s.ok>0?`<div style="width:${pOk}%;background:var(--green);display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:#fff;font-weight:700;">${s.ok}</span></div>`:''}
+      </div></div></div>`;
+  }).join('')+`<div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--td);">
+    <span><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:2px;margin-right:4px;"></span>Vencido</span>
+    <span><span style="display:inline-block;width:10px;height:10px;background:var(--yellow);border-radius:2px;margin-right:4px;"></span>Próximo</span>
+    <span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;margin-right:4px;"></span>OK</span></div>`;
+  const td=filtArea?getEquipos(filtArea):DATA;
+  document.getElementById('chart-cumpl').innerHTML=['ALTO','MEDIO','BAJO'].map(c=>{
+    const eqs=td.filter(e=>e.categoria===c); let tot=0,ok=0;
+    eqs.forEach(e=>calcIntervenciones(e.intervenciones).forEach(i=>{ tot++; if(i.estado==='OK')ok++; }));
+    const pct=tot>0?Math.round(ok/tot*100):0;
+    const col={ALTO:'var(--red)',MEDIO:'var(--yellow)',BAJO:'var(--green)'}[c];
+    return `<div class="cumpl-row"><div class="cumpl-label">${c}</div><div class="cumpl-track"><div class="cumpl-fill" style="width:${pct}%;background:${col};"><span>${pct}%</span></div></div><span style="font-size:11px;color:var(--td);width:50px;">${ok}/${tot}</span></div>`;
+  }).join('');
+  const regs=getRegistrosSync(); const cntM=new Array(12).fill(0);
+  regs.forEach(r=>{ if(r.fecha) cntM[new Date(r.fecha+'T00:00:00').getMonth()]++; });
+  const maxM=Math.max(...cntM,1);
+  document.getElementById('chart-meses').innerHTML=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'].map((m,i)=>`<div class="bar-row"><div class="bar-label">${m}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(cntM[i]/maxM*100)}%;background:var(--blue);"><span>${cntM[i]}</span></div></div></div>`).join('');
+  const prx30=[]; (filtArea?getEquipos(filtArea):DATA).forEach(e=>calcIntervenciones(e.intervenciones).forEach(iv=>{ if(iv.dias_para_proxima>=0&&iv.dias_para_proxima<=30) prx30.push(iv.dias_para_proxima); }));
+  const cs=[0,0,0,0]; prx30.forEach(d=>{ if(d<=7)cs[0]++;else if(d<=14)cs[1]++;else if(d<=21)cs[2]++;else cs[3]++; });
+  const maxS=Math.max(...cs,1);
+  document.getElementById('chart-proximas30').innerHTML=['Sem 1 (1-7d)','Sem 2 (8-14d)','Sem 3 (15-21d)','Sem 4 (22-30d)'].map((s,i)=>`<div class="bar-row"><div class="bar-label" style="width:120px;font-size:10px;">${s}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(cs[i]/maxS*100)}%;background:${'#ef4444,#f59e0b,#8b5cf6,#3b82f6'.split(',')[i]};"><span>${cs[i]}</span></div></div></div>`).join('');
+  document.getElementById('chart-tabla-areas').innerHTML=`<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:var(--s2);"><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:left;">Área</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;">Equipos</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;color:var(--red);">Venc.</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;color:var(--yellow);">Próx.</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;color:var(--green);">OK</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;">Cumplim.</th></tr></thead><tbody>${aStats.map(s=>{ const tot=s.v+s.p+s.ok; const pct=tot>0?Math.round(s.ok/tot*100):0; const col=pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)'; return `<tr><td style="padding:8px 12px;border-top:1px solid var(--bd);font-size:12px;">${s.a.icono} <b style="color:var(--tb);">${s.a.nombre}</b></td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;">${getEquipos(s.a.id).length}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;color:var(--red);">${s.v}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;color:var(--yellow);">${s.p}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;color:var(--green);">${s.ok}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;"><span style="font-size:12px;font-weight:700;color:${col};">${pct}%</span></td></tr>`; }).join('')}</tbody></table>`;
+}
 
 function renderReportes(){
   let v=0,p=0,ok=0;
