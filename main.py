@@ -51,17 +51,8 @@ def init_db():
                 intervenciones JSONB DEFAULT '[]'
             )
         """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS areas (
-                id TEXT PRIMARY KEY,
-                nombre TEXT NOT NULL,
-                icono TEXT DEFAULT '🏭',
-                color TEXT DEFAULT '#3b82f6'
-            )
-        """)
         conn.commit(); cur.close(); conn.close()
         seed_equipos_lb()
-        seed_areas()
     except Exception as e:
         print("DB init error:", e)
 
@@ -229,106 +220,6 @@ def debug_seed():
         c2 = cur.fetchone()["c"]
         cur.close(); conn.close()
         return {"total_equipos": c1, "lb_equipos": c2}
-    except Exception as e:
-        return {"error": str(e)}
-
-AREAS_SEED = [
-    {"id":"LB","nombre":"Línea de Beneficio","icono":"🏭","color":"#3b82f6"},
-    {"id":"DS","nombre":"Desposte","icono":"🔪","color":"#8b5cf6"},
-    {"id":"CO","nombre":"Corrales","icono":"🐄","color":"#10b981"},
-    {"id":"PTAR","nombre":"PTAR","icono":"💧","color":"#06b6d4"},
-    {"id":"PTAP","nombre":"PTAP","icono":"🚰","color":"#f59e0b"},
-]
-
-def seed_areas():
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("SELECT COUNT(*) as c FROM areas")
-        if cur.fetchone()["c"] == 0:
-            for a in AREAS_SEED:
-                cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING",
-                    (a["id"],a["nombre"],a["icono"],a["color"]))
-            conn.commit()
-        cur.close(); conn.close()
-    except Exception as ex:
-        print("seed_areas error:", ex)
-
-class AreaIn(BaseModel):
-    id: str
-    nombre: str
-    icono: str = "🏭"
-    color: str = "#3b82f6"
-
-@app.get("/api/areas")
-def get_areas():
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("SELECT * FROM areas ORDER BY id")
-        rows = cur.fetchall(); cur.close(); conn.close()
-        return [dict(r) for r in rows]
-    except Exception:
-        return []
-
-@app.post("/api/areas")
-def create_area(data: AreaIn):
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) RETURNING *",
-                    (data.id, data.nombre, data.icono, data.color))
-        row = dict(cur.fetchone()); conn.commit(); cur.close(); conn.close()
-        return row
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.put("/api/areas/{area_id}")
-def update_area(area_id: str, data: AreaIn):
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("UPDATE areas SET nombre=%s, icono=%s, color=%s WHERE id=%s RETURNING *",
-                    (data.nombre, data.icono, data.color, area_id))
-        row = cur.fetchone()
-        conn.commit(); cur.close(); conn.close()
-        return dict(row) if row else {"ok": True}
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.delete("/api/areas/{area_id}")
-def delete_area(area_id: str):
-    if area_id == "LB":
-        raise HTTPException(400, "No se puede eliminar el área base")
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("DELETE FROM equipos WHERE area_id=%s", (area_id,))
-        cur.execute("DELETE FROM areas WHERE id=%s", (area_id,))
-        conn.commit(); cur.close(); conn.close()
-        return {"ok": True}
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.get("/api/debug/fix_areas")
-def fix_areas():
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        # Asegurar que existan las 5 áreas base
-        for a in AREAS_SEED:
-            cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING",
-                (a["id"],a["nombre"],a["icono"],a["color"]))
-        conn.commit()
-        # Eliminar áreas duplicadas creadas manualmente (id empieza con AREA_) cuyo nombre coincide con una base
-        cur.execute("SELECT id,nombre FROM areas WHERE id LIKE 'AREA_%'")
-        dups = cur.fetchall()
-        removed = []
-        base_names = {a["nombre"].lower() for a in AREAS_SEED}
-        for d in dups:
-            if d["nombre"].strip().lower() in base_names:
-                cur.execute("DELETE FROM equipos WHERE area_id=%s", (d["id"],))
-                cur.execute("DELETE FROM areas WHERE id=%s", (d["id"],))
-                removed.append(d["id"])
-        conn.commit()
-        cur.execute("SELECT * FROM areas ORDER BY id")
-        rows = [dict(r) for r in cur.fetchall()]
-        cur.close(); conn.close()
-        return {"removed": removed, "areas": rows}
     except Exception as e:
         return {"error": str(e)}
 
