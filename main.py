@@ -910,6 +910,10 @@ textarea.form-control{resize:vertical;}
       <div class="config-section">
         <h3>&#128274; Contraseña de Supervisor</h3>
         <p style="font-size:12px;color:var(--td);margin-bottom:12px;">Esta contraseña protegerá acciones críticas como eliminar áreas o equipos.</p>
+        <div class="form-group" style="margin-bottom:14px;max-width:300px;">
+          <label>Usuario</label>
+          <input type="text" class="form-control" id="cfg-usuario" placeholder="Nombre de usuario">
+        </div>
         <div class="form-row">
           <div class="form-group">
             <label>Contraseña actual</label>
@@ -924,7 +928,7 @@ textarea.form-control{resize:vertical;}
           <label>Confirmar contraseña</label>
           <input type="password" class="form-control" id="cfg-pass-confirm" placeholder="Repetir nueva contraseña">
         </div>
-        <button class="btn-primary" onclick="cambiarPassword()">&#128274; Actualizar Contraseña</button>
+        <button class="btn-primary" onclick="confirmarPin()">&#128274; Actualizar Contraseña</button>
       </div>
 
       <div class="config-section">
@@ -1247,7 +1251,7 @@ function goPage(id,el){
   if(id==='graficas') renderGraficas();
   if(id==='areas') renderAreas();
   if(id==='reportes') renderReportes();
-  if(id==='config'){ }
+  if(id==='config'){ const cfg=getConfig(); document.getElementById('cfg-usuario').value=cfg.usuario||''; }
   if(id==='tecnicos'){ renderTecLista(); populateTecnicoSelect(); }
 }
 
@@ -1651,7 +1655,28 @@ async function exportPDF(){
 }
 
 function guardarConfig(){ const cfg=getConfig(); cfg.empresa=document.getElementById('cfg-empresa').value.trim()||'Planta de Beneficio'; cfg.year=document.getElementById('cfg-year').value.trim()||'2026'; lsSet('mtto_config',cfg); document.getElementById('sb-empresa').textContent=cfg.empresa; alert('✅ Guardado'); }
-function cambiarPassword(){ const cfg=getConfig(), actual=document.getElementById('cfg-pass-actual').value, nueva=document.getElementById('cfg-pass-nueva').value, conf=document.getElementById('cfg-pass-confirm').value; if(cfg.pass&&actual!==cfg.pass){alert('Contraseña actual incorrecta');return;} if(!nueva||nueva.length<4){alert('Mínimo 4 caracteres');return;} if(nueva!==conf){alert('Las contraseñas no coinciden');return;} cfg.pass=nueva; lsSet('mtto_config',cfg); ['cfg-pass-actual','cfg-pass-nueva','cfg-pass-confirm'].forEach(id=>document.getElementById(id).value=''); alert('✅ Contraseña actualizada'); }
+function confirmarPin(){
+  const pin = prompt('Ingresa la clave de administrador para continuar:');
+  if(pin===null) return;
+  if(pin!=='123456'){ alert('Clave incorrecta'); return; }
+  cambiarPassword();
+}
+
+function cambiarPassword(){
+  const cfg=getConfig();
+  const usuario=document.getElementById('cfg-usuario').value.trim();
+  const actual=document.getElementById('cfg-pass-actual').value, nueva=document.getElementById('cfg-pass-nueva').value, conf=document.getElementById('cfg-pass-confirm').value;
+  if(cfg.pass&&actual!==cfg.pass){alert('Contraseña actual incorrecta');return;}
+  if(nueva||conf){
+    if(!nueva||nueva.length<4){alert('Mínimo 4 caracteres');return;}
+    if(nueva!==conf){alert('Las contraseñas no coinciden');return;}
+    cfg.pass=nueva;
+  }
+  if(usuario) cfg.usuario=usuario;
+  lsSet('mtto_config',cfg);
+  ['cfg-pass-actual','cfg-pass-nueva','cfg-pass-confirm'].forEach(id=>document.getElementById(id).value='');
+  alert('✅ Actualizado');
+}
 
 function exportarDatos(){
   const bk={version:2,fecha:new Date().toISOString(),areas:getAreas(),registros:getRegistrosSync(),config:getConfig(),tecnicos:getTecnicos(),equipos_custom:{},deleted_LB:ls('mtto_deleted_LB')||[]};
