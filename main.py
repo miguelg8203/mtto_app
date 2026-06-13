@@ -1126,20 +1126,19 @@ const FREQ_DIAS = {MENSUAL:30,BIMENSUAL:60,TRIMESTRAL:90,CUATRIMESTRAL:120,SEMES
 function ls(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 
-let _areasCache = [];
-
 function getAreas(){
-  return _areasCache;
+  let a=ls('mtto_areas');
+  if(!a){
+    a=[{id:'LB',nombre:'Línea de Beneficio',icono:'🏭',color:'#3b82f6'},
+       {id:'DS',nombre:'Desposte',icono:'🔪',color:'#8b5cf6'},
+       {id:'CO',nombre:'Corrales',icono:'🐄',color:'#10b981'},
+       {id:'PTAR',nombre:'PTAR',icono:'💧',color:'#06b6d4'},
+       {id:'PTAP',nombre:'PTAP',icono:'🚰',color:'#f59e0b'}];
+    lsSet('mtto_areas',a);
+  }
+  return a;
 }
-
-async function fetchAreas(){
-  try{
-    const r = await fetch('/api/areas');
-    const d = await r.json();
-    _areasCache = Array.isArray(d) && d.length ? d : _areasCache;
-  }catch(e){}
-  return _areasCache;
-}
+async function fetchAreas(){ return getAreas(); }
 
 let _equiposCache = {};
 
@@ -1592,18 +1591,13 @@ function openAreaModal(aId){
 async function guardarArea(){
   const nombre=document.getElementById('area-nombre').value.trim(), icono=document.getElementById('area-icono').value.trim()||'🏭', color=document.getElementById('area-color').value, editId=document.getElementById('area-edit-id').value;
   if(!nombre){ alert('Nombre requerido'); return; }
-  try{
-    if(editId){
-      await fetch('/api/areas/'+editId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:editId,nombre,icono,color})});
-    } else {
-      const newId='AREA_'+Date.now();
-      await fetch('/api/areas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newId,nombre,icono,color})});
-    }
-    await fetchAreas();
-    buildAreaSelectors(); await renderAreas(); closeAreaModal();
-  }catch(e){ alert('Error: '+e.message); }
+  let areas=getAreas();
+  if(editId) areas=areas.map(a=>a.id===editId?{...a,nombre,icono,color}:a);
+  else areas.push({id:'AREA_'+Date.now(),nombre,icono,color});
+  lsSet('mtto_areas',areas);
+  buildAreaSelectors(); await renderAreas(); closeAreaModal();
 }
-async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; try{ await fetch('/api/areas/'+editId,{method:'DELETE'}); await fetchAreas(); buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }catch(e){ alert('Error: '+e.message); } }
+async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }
 function closeAreaModal(e){ if(!e||e.target===document.getElementById('area-modal-overlay')) document.getElementById('area-modal-overlay').classList.remove('on'); }
 
 async function renderGraficas(){
