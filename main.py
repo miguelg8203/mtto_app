@@ -305,6 +305,33 @@ def delete_area(area_id: str):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@app.get("/api/debug/fix_areas")
+def fix_areas():
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        # Asegurar que existan las 5 áreas base
+        for a in AREAS_SEED:
+            cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING",
+                (a["id"],a["nombre"],a["icono"],a["color"]))
+        conn.commit()
+        # Eliminar áreas duplicadas creadas manualmente (id empieza con AREA_) cuyo nombre coincide con una base
+        cur.execute("SELECT id,nombre FROM areas WHERE id LIKE 'AREA_%'")
+        dups = cur.fetchall()
+        removed = []
+        base_names = {a["nombre"].lower() for a in AREAS_SEED}
+        for d in dups:
+            if d["nombre"].strip().lower() in base_names:
+                cur.execute("DELETE FROM equipos WHERE area_id=%s", (d["id"],))
+                cur.execute("DELETE FROM areas WHERE id=%s", (d["id"],))
+                removed.append(d["id"])
+        conn.commit()
+        cur.execute("SELECT * FROM areas ORDER BY id")
+        rows = [dict(r) for r in cur.fetchall()]
+        cur.close(); conn.close()
+        return {"removed": removed, "areas": rows}
+    except Exception as e:
+        return {"error": str(e)}
+
 HTML = """<!DOCTYPE html>
 <html lang="es">
 <head>
