@@ -51,17 +51,8 @@ def init_db():
                 intervenciones JSONB DEFAULT '[]'
             )
         """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS areas (
-                id TEXT PRIMARY KEY,
-                nombre TEXT NOT NULL,
-                icono TEXT DEFAULT '🏭',
-                color TEXT DEFAULT '#3b82f6'
-            )
-        """)
         conn.commit(); cur.close(); conn.close()
         seed_equipos_lb()
-        seed_areas()
     except Exception as e:
         print("DB init error:", e)
 
@@ -229,99 +220,6 @@ def debug_seed():
         c2 = cur.fetchone()["c"]
         cur.close(); conn.close()
         return {"total_equipos": c1, "lb_equipos": c2}
-    except Exception as e:
-        return {"error": str(e)}
-
-AREAS_SEED = [
-    {"id":"LB","nombre":"Línea de Beneficio","icono":"🏭","color":"#3b82f6"},
-    {"id":"DS","nombre":"Desposte","icono":"🔪","color":"#8b5cf6"},
-    {"id":"CO","nombre":"Corrales","icono":"🐄","color":"#10b981"},
-    {"id":"PTAR","nombre":"PTAR","icono":"💧","color":"#06b6d4"},
-    {"id":"PTAP","nombre":"PTAP","icono":"🚰","color":"#f59e0b"},
-]
-
-def seed_areas():
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        for a in AREAS_SEED:
-            cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING",
-                (a["id"],a["nombre"],a["icono"],a["color"]))
-        conn.commit(); cur.close(); conn.close()
-    except Exception as ex:
-        print("seed_areas error:", ex)
-
-class AreaIn(BaseModel):
-    id: str
-    nombre: str
-    icono: str = "🏭"
-    color: str = "#3b82f6"
-
-@app.get("/api/areas")
-def get_areas():
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("SELECT * FROM areas ORDER BY id")
-        rows = cur.fetchall(); cur.close(); conn.close()
-        return [dict(r) for r in rows]
-    except Exception:
-        return []
-
-@app.post("/api/areas")
-def create_area(data: AreaIn):
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING RETURNING *",
-                    (data.id, data.nombre, data.icono, data.color))
-        row = cur.fetchone()
-        conn.commit(); cur.close(); conn.close()
-        return dict(row) if row else {"ok": True, "msg": "ya existe"}
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.put("/api/areas/{area_id}")
-def update_area(area_id: str, data: AreaIn):
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("UPDATE areas SET nombre=%s, icono=%s, color=%s WHERE id=%s RETURNING *",
-                    (data.nombre, data.icono, data.color, area_id))
-        row = cur.fetchone()
-        conn.commit(); cur.close(); conn.close()
-        return dict(row) if row else {"ok": True}
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.delete("/api/areas/{area_id}")
-def delete_area(area_id: str):
-    if area_id == "LB":
-        raise HTTPException(400, "No se puede eliminar el área base")
-    try:
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("DELETE FROM equipos WHERE area_id=%s", (area_id,))
-        cur.execute("DELETE FROM areas WHERE id=%s", (area_id,))
-        conn.commit(); cur.close(); conn.close()
-        return {"ok": True}
-    except Exception as e:
-        raise HTTPException(500, str(e))
-
-@app.get("/api/debug/fix_areas")
-def fix_areas():
-    try:
-        seed_areas()
-        conn = get_conn(); cur = conn.cursor()
-        cur.execute("SELECT id,nombre FROM areas WHERE id LIKE 'AREA_%'")
-        dups = cur.fetchall()
-        base_names = {a["nombre"].lower() for a in AREAS_SEED}
-        removed = []
-        for d in dups:
-            if d["nombre"].strip().lower() in base_names:
-                cur.execute("DELETE FROM equipos WHERE area_id=%s", (d["id"],))
-                cur.execute("DELETE FROM areas WHERE id=%s", (d["id"],))
-                removed.append(d["id"])
-        conn.commit()
-        cur.execute("SELECT * FROM areas ORDER BY id")
-        rows = [dict(r) for r in cur.fetchall()]
-        cur.close(); conn.close()
-        return {"removed": removed, "areas": rows}
     except Exception as e:
         return {"error": str(e)}
 
@@ -1228,10 +1126,7 @@ const FREQ_DIAS = {MENSUAL:30,BIMENSUAL:60,TRIMESTRAL:90,CUATRIMESTRAL:120,SEMES
 function ls(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 
-let _areasCache = null;
-
 function getAreas(){
-  if(_areasCache && _areasCache.length) return _areasCache;
   let a=ls('mtto_areas');
   if(!a){
     a=[{id:'LB',nombre:'Línea de Beneficio',icono:'🏭',color:'#3b82f6'},
@@ -1239,18 +1134,11 @@ function getAreas(){
        {id:'CO',nombre:'Corrales',icono:'🐄',color:'#10b981'},
        {id:'PTAR',nombre:'PTAR',icono:'💧',color:'#06b6d4'},
        {id:'PTAP',nombre:'PTAP',icono:'🚰',color:'#f59e0b'}];
+    lsSet('mtto_areas',a);
   }
   return a;
 }
-
-async function fetchAreas(){
-  try{
-    const r = await fetch('/api/areas');
-    const d = await r.json();
-    if(Array.isArray(d) && d.length) _areasCache = d;
-  }catch(e){}
-  return getAreas();
-}
+async function fetchAreas(){ return getAreas(); }
 
 let _equiposCache = {};
 
@@ -1703,62 +1591,15 @@ function openAreaModal(aId){
 async function guardarArea(){
   const nombre=document.getElementById('area-nombre').value.trim(), icono=document.getElementById('area-icono').value.trim()||'🏭', color=document.getElementById('area-color').value, editId=document.getElementById('area-edit-id').value;
   if(!nombre){ alert('Nombre requerido'); return; }
-  try{
-    if(editId){
-      await fetch('/api/areas/'+editId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:editId,nombre,icono,color})});
-    } else {
-      const newId='AREA_'+Date.now();
-      await fetch('/api/areas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newId,nombre,icono,color})});
-    }
-    await fetchAreas();
-  }catch(e){
-    let areas=getAreas();
-    if(editId) areas=areas.map(a=>a.id===editId?{...a,nombre,icono,color}:a);
-    else areas.push({id:'AREA_'+Date.now(),nombre,icono,color});
-    lsSet('mtto_areas',areas); _areasCache=areas;
-  }
+  let areas=getAreas();
+  if(editId) areas=areas.map(a=>a.id===editId?{...a,nombre,icono,color}:a);
+  else areas.push({id:'AREA_'+Date.now(),nombre,icono,color});
+  lsSet('mtto_areas',areas);
   buildAreaSelectors(); await renderAreas(); closeAreaModal();
 }
-async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return;
-  try{ await fetch('/api/areas/'+editId,{method:'DELETE'}); await fetchAreas(); }
-  catch(e){ let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); _areasCache=areas; }
-  buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }
-function closeAreaModal(e){ if(!e||e.target===document.getElementById('area-modal-overlay')) document.getElementById('area-modal-overlay').classList.remove('on'); }
 
-async function renderGraficas(){
-  const filtArea=document.getElementById('graf-area').value, areas=getAreas();
-  for(const a of areas){ if(!_equiposCache[a.id]) await fetchEquipos(a.id); }
-  const aStats=areas.map(a=>{ const eqs=getEquipos(a.id); let v=0,p=0,ok=0; eqs.forEach(e=>calcIntervenciones(e.intervenciones).forEach(i=>{ if(i.estado==='VENCIDO')v++;else if(i.estado==='PROXIMO')p++;else if(i.estado==='OK')ok++; })); return {a,v,p,ok,tot:v+p+ok}; });
-  document.getElementById('chart-areas').innerHTML=aStats.map(s=>{
-    const pV=s.tot>0?Math.round(s.v/s.tot*100):0, pP=s.tot>0?Math.round(s.p/s.tot*100):0, pOk=s.tot>0?Math.round(s.ok/s.tot*100):0;
-    return `<div class="bar-row" style="margin-bottom:8px;"><div class="bar-label" style="width:120px;font-size:10px;">${s.a.icono} ${s.a.nombre.substring(0,14)}</div>
-      <div style="flex:1;"><div style="display:flex;height:20px;border-radius:4px;overflow:hidden;background:var(--s3);">
-        ${s.v>0?`<div style="width:${pV}%;background:var(--red);display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:#fff;font-weight:700;">${s.v}</span></div>`:''}
-        ${s.p>0?`<div style="width:${pP}%;background:var(--yellow);display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:#000;font-weight:700;">${s.p}</span></div>`:''}
-        ${s.ok>0?`<div style="width:${pOk}%;background:var(--green);display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;color:#fff;font-weight:700;">${s.ok}</span></div>`:''}
-      </div></div></div>`;
-  }).join('')+`<div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--td);">
-    <span><span style="display:inline-block;width:10px;height:10px;background:var(--red);border-radius:2px;margin-right:4px;"></span>Vencido</span>
-    <span><span style="display:inline-block;width:10px;height:10px;background:var(--yellow);border-radius:2px;margin-right:4px;"></span>Próximo</span>
-    <span><span style="display:inline-block;width:10px;height:10px;background:var(--green);border-radius:2px;margin-right:4px;"></span>OK</span></div>`;
-  const td=filtArea?getEquipos(filtArea):DATA;
-  document.getElementById('chart-cumpl').innerHTML=['ALTO','MEDIO','BAJO'].map(c=>{
-    const eqs=td.filter(e=>e.categoria===c); let tot=0,ok=0;
-    eqs.forEach(e=>calcIntervenciones(e.intervenciones).forEach(i=>{ tot++; if(i.estado==='OK')ok++; }));
-    const pct=tot>0?Math.round(ok/tot*100):0;
-    const col={ALTO:'var(--red)',MEDIO:'var(--yellow)',BAJO:'var(--green)'}[c];
-    return `<div class="cumpl-row"><div class="cumpl-label">${c}</div><div class="cumpl-track"><div class="cumpl-fill" style="width:${pct}%;background:${col};"><span>${pct}%</span></div></div><span style="font-size:11px;color:var(--td);width:50px;">${ok}/${tot}</span></div>`;
-  }).join('');
-  const regs=getRegistrosSync(); const cntM=new Array(12).fill(0);
-  regs.forEach(r=>{ if(r.fecha) cntM[new Date(r.fecha+'T00:00:00').getMonth()]++; });
-  const maxM=Math.max(...cntM,1);
-  document.getElementById('chart-meses').innerHTML=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'].map((m,i)=>`<div class="bar-row"><div class="bar-label">${m}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(cntM[i]/maxM*100)}%;background:var(--blue);"><span>${cntM[i]}</span></div></div></div>`).join('');
-  const prx30=[]; (filtArea?getEquipos(filtArea):DATA).forEach(e=>calcIntervenciones(e.intervenciones).forEach(iv=>{ if(iv.dias_para_proxima>=0&&iv.dias_para_proxima<=30) prx30.push(iv.dias_para_proxima); }));
-  const cs=[0,0,0,0]; prx30.forEach(d=>{ if(d<=7)cs[0]++;else if(d<=14)cs[1]++;else if(d<=21)cs[2]++;else cs[3]++; });
-  const maxS=Math.max(...cs,1);
-  document.getElementById('chart-proximas30').innerHTML=['Sem 1 (1-7d)','Sem 2 (8-14d)','Sem 3 (15-21d)','Sem 4 (22-30d)'].map((s,i)=>`<div class="bar-row"><div class="bar-label" style="width:120px;font-size:10px;">${s}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(cs[i]/maxS*100)}%;background:${'#ef4444,#f59e0b,#8b5cf6,#3b82f6'.split(',')[i]};"><span>${cs[i]}</span></div></div></div>`).join('');
-  document.getElementById('chart-tabla-areas').innerHTML=`<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:var(--s2);"><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:left;">Área</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;">Equipos</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;color:var(--red);">Venc.</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;color:var(--yellow);">Próx.</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;color:var(--green);">OK</th><th style="padding:8px 12px;font-size:11px;color:var(--td);text-align:center;">Cumplim.</th></tr></thead><tbody>${aStats.map(s=>{ const tot=s.v+s.p+s.ok; const pct=tot>0?Math.round(s.ok/tot*100):0; const col=pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)'; return `<tr><td style="padding:8px 12px;border-top:1px solid var(--bd);font-size:12px;">${s.a.icono} <b style="color:var(--tb);">${s.a.nombre}</b></td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;">${getEquipos(s.a.id).length}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;color:var(--red);">${s.v}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;color:var(--yellow);">${s.p}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;font-size:12px;color:var(--green);">${s.ok}</td><td style="padding:8px 12px;border-top:1px solid var(--bd);text-align:center;"><span style="font-size:12px;font-weight:700;color:${col};">${pct}%</span></td></tr>`; }).join('')}</tbody></table>`;
-}
+async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }
+
 
 function renderReportes(){
   let v=0,p=0,ok=0;
