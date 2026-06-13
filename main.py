@@ -51,8 +51,17 @@ def init_db():
                 intervenciones JSONB DEFAULT '[]'
             )
         """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS areas (
+                id TEXT PRIMARY KEY,
+                nombre TEXT NOT NULL,
+                icono TEXT DEFAULT '🏭',
+                color TEXT DEFAULT '#3b82f6'
+            )
+        """)
         conn.commit(); cur.close(); conn.close()
         seed_equipos_lb()
+        seed_areas()
     except Exception as e:
         print("DB init error:", e)
 
@@ -222,6 +231,77 @@ def debug_seed():
         return {"total_equipos": c1, "lb_equipos": c2}
     except Exception as e:
         return {"error": str(e)}
+
+AREAS_SEED = [
+    {"id":"LB","nombre":"Línea de Beneficio","icono":"🏭","color":"#3b82f6"},
+    {"id":"DS","nombre":"Desposte","icono":"🔪","color":"#8b5cf6"},
+    {"id":"CO","nombre":"Corrales","icono":"🐄","color":"#10b981"},
+    {"id":"PTAR","nombre":"PTAR","icono":"💧","color":"#06b6d4"},
+    {"id":"PTAP","nombre":"PTAP","icono":"🚰","color":"#f59e0b"},
+]
+
+def seed_areas():
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        for a in AREAS_SEED:
+            cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING",
+                (a["id"],a["nombre"],a["icono"],a["color"]))
+        conn.commit(); cur.close(); conn.close()
+    except Exception as ex:
+        print("seed_areas error:", ex)
+
+class AreaIn(BaseModel):
+    id: str
+    nombre: str
+    icono: str = "🏭"
+    color: str = "#3b82f6"
+
+@app.get("/api/areas")
+def get_areas():
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("SELECT * FROM areas ORDER BY id")
+        rows = cur.fetchall(); cur.close(); conn.close()
+        return [dict(r) for r in rows]
+    except Exception:
+        return []
+
+@app.post("/api/areas")
+def create_area(data: AreaIn):
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("INSERT INTO areas (id,nombre,icono,color) VALUES (%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING RETURNING *",
+                    (data.id, data.nombre, data.icono, data.color))
+        row = cur.fetchone()
+        conn.commit(); cur.close(); conn.close()
+        return dict(row) if row else {"ok": True, "msg": "ya existe"}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@app.put("/api/areas/{area_id}")
+def update_area(area_id: str, data: AreaIn):
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("UPDATE areas SET nombre=%s, icono=%s, color=%s WHERE id=%s RETURNING *",
+                    (data.nombre, data.icono, data.color, area_id))
+        row = cur.fetchone()
+        conn.commit(); cur.close(); conn.close()
+        return dict(row) if row else {"ok": True}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@app.delete("/api/areas/{area_id}")
+def delete_area(area_id: str):
+    if area_id == "LB":
+        raise HTTPException(400, "No se puede eliminar el área base")
+    try:
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("DELETE FROM equipos WHERE area_id=%s", (area_id,))
+        cur.execute("DELETE FROM areas WHERE id=%s", (area_id,))
+        conn.commit(); cur.close(); conn.close()
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 HTML = """<!DOCTYPE html>
 <html lang="es">
@@ -1126,7 +1206,10 @@ const FREQ_DIAS = {MENSUAL:30,BIMENSUAL:60,TRIMESTRAL:90,CUATRIMESTRAL:120,SEMES
 function ls(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 
+let _areasCache = null;
+
 function getAreas(){
+  if(_areasCache && _areasCache.length) return _areasCache;
   let a=ls('mtto_areas');
   if(!a){
     a=[{id:'LB',nombre:'Línea de Beneficio',icono:'🏭',color:'#3b82f6'},
@@ -1134,11 +1217,18 @@ function getAreas(){
        {id:'CO',nombre:'Corrales',icono:'🐄',color:'#10b981'},
        {id:'PTAR',nombre:'PTAR',icono:'💧',color:'#06b6d4'},
        {id:'PTAP',nombre:'PTAP',icono:'🚰',color:'#f59e0b'}];
-    lsSet('mtto_areas',a);
   }
   return a;
 }
-async function fetchAreas(){ return getAreas(); }
+
+async function fetchAreas(){
+  try{
+    const r = await fetch('/api/areas');
+    const d = await r.json();
+    if(Array.isArray(d) && d.length) _areasCache = d;
+  }catch(e){}
+  return getAreas();
+}
 
 let _equiposCache = {};
 
@@ -1591,13 +1681,26 @@ function openAreaModal(aId){
 async function guardarArea(){
   const nombre=document.getElementById('area-nombre').value.trim(), icono=document.getElementById('area-icono').value.trim()||'🏭', color=document.getElementById('area-color').value, editId=document.getElementById('area-edit-id').value;
   if(!nombre){ alert('Nombre requerido'); return; }
-  let areas=getAreas();
-  if(editId) areas=areas.map(a=>a.id===editId?{...a,nombre,icono,color}:a);
-  else areas.push({id:'AREA_'+Date.now(),nombre,icono,color});
-  lsSet('mtto_areas',areas);
+  try{
+    if(editId){
+      await fetch('/api/areas/'+editId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:editId,nombre,icono,color})});
+    } else {
+      const newId='AREA_'+Date.now();
+      await fetch('/api/areas',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newId,nombre,icono,color})});
+    }
+    await fetchAreas();
+  }catch(e){
+    let areas=getAreas();
+    if(editId) areas=areas.map(a=>a.id===editId?{...a,nombre,icono,color}:a);
+    else areas.push({id:'AREA_'+Date.now(),nombre,icono,color});
+    lsSet('mtto_areas',areas); _areasCache=areas;
+  }
   buildAreaSelectors(); await renderAreas(); closeAreaModal();
 }
-async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return; let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }
+async function eliminarArea(){ const editId=document.getElementById('area-edit-id').value; if(!editId||editId==='LB'){alert('No se puede eliminar el área base.');return;} if(!confirm('¿Eliminar esta área y todos sus equipos?')) return;
+  try{ await fetch('/api/areas/'+editId,{method:'DELETE'}); await fetchAreas(); }
+  catch(e){ let areas=getAreas().filter(a=>a.id!==editId); lsSet('mtto_areas',areas); _areasCache=areas; }
+  buildAreaSelectors(); if(currentArea===editId) await cambiarArea('LB'); await renderAreas(); closeAreaModal(); }
 function closeAreaModal(e){ if(!e||e.target===document.getElementById('area-modal-overlay')) document.getElementById('area-modal-overlay').classList.remove('on'); }
 
 async function renderGraficas(){
