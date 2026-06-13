@@ -303,6 +303,28 @@ def delete_area(area_id: str):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@app.get("/api/debug/fix_areas")
+def fix_areas():
+    try:
+        seed_areas()
+        conn = get_conn(); cur = conn.cursor()
+        cur.execute("SELECT id,nombre FROM areas WHERE id LIKE 'AREA_%'")
+        dups = cur.fetchall()
+        base_names = {a["nombre"].lower() for a in AREAS_SEED}
+        removed = []
+        for d in dups:
+            if d["nombre"].strip().lower() in base_names:
+                cur.execute("DELETE FROM equipos WHERE area_id=%s", (d["id"],))
+                cur.execute("DELETE FROM areas WHERE id=%s", (d["id"],))
+                removed.append(d["id"])
+        conn.commit()
+        cur.execute("SELECT * FROM areas ORDER BY id")
+        rows = [dict(r) for r in cur.fetchall()]
+        cur.close(); conn.close()
+        return {"removed": removed, "areas": rows}
+    except Exception as e:
+        return {"error": str(e)}
+
 HTML = """<!DOCTYPE html>
 <html lang="es">
 <head>
